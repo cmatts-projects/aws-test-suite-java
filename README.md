@@ -18,3 +18,14 @@ mvn clean verify
 # Services
 ## DynamoDB
 The dynamoDB example demonstrates how to create dynamo tables using Cloudformation and read and write to those tables using the DynamoDB mapper feature.
+
+Features:
+* Cloudformation definition of tables
+* Bulk loading data
+* Searching by Partition key
+* Searching by GSI
+* Use of DynamoDBMapper and annotations
+* Table name prefix override configuration
+* Localstack test container for DynamoDB and Cloudformation
+* Lombok based pojo's
+
