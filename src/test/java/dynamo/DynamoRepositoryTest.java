@@ -1,8 +1,6 @@
 package dynamo;
 
 import cloudformation.CloudFormationClientFactory;
-import com.amazonaws.services.cloudformation.AmazonCloudFormation;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import dynamo.model.Fact;
 import dynamo.model.Person;
 import dynamo.model.Siblings;
@@ -22,7 +20,6 @@ import java.util.Optional;
 
 import static cloudformation.DynamoStackRequestFactory.createDynamoDbStackRequest;
 import static dynamo.DynamoDbTestDataFactory.*;
-import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.CLOUDFORMATION;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.DYNAMODB;
@@ -46,25 +43,16 @@ class DynamoRepositoryTest {
 
     @BeforeAll
     static void beforeAll() throws Exception {
-        AmazonCloudFormation cfClient = cfClientFactory.createCloudformationClient();
-
         environmentVariables
             .set("AWS_ACCESS_KEY", LOCAL_STACK_CONTAINER.getAccessKey())
             .set("AWS_SECRET_ACCESS_KEY", LOCAL_STACK_CONTAINER.getSecretKey())
             .set("LOCAL_DYNAMODB_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(DYNAMODB).toString())
-            .set("AWS_REGION", LOCAL_STACK_CONTAINER.getRegion())
-            .execute(() -> {
-                cfClient.createStack(createDynamoDbStackRequest());
-                loadData();
+            .set("AWS_REGION", LOCAL_STACK_CONTAINER.getRegion());
 
-                repo = new DynamoRepository();
-            });
-    }
+        cfClientFactory.createCloudformationClient().createStack(createDynamoDbStackRequest());
 
-    private static void loadData() {
-        DynamoDBMapper mapper = DynamoClient.getDynamoMapper();
-        mapper.batchWrite(peopleDataList(), emptyList(), DynamoClient.getDynamoMapperConfig());
-        mapper.batchWrite(factDataList(), emptyList(), DynamoClient.getDynamoMapperConfig());
+        repo = new DynamoRepository();
+        repo.load(peopleDataList(), factDataList());
     }
 
     @Test

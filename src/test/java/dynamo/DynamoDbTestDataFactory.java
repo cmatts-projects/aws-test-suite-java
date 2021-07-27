@@ -67,7 +67,7 @@ public class DynamoDbTestDataFactory {
                 .parents(asList(person(16), person(17), person(18), person(19)))
                 .build();
 
-    public static List<Object> peopleDataList() {
+    public static List<Person> peopleDataList() {
         return IntStream.range(0, PEOPLE_DATA.length)
                 .mapToObj(i -> person(i + 1))
                 .collect(Collectors.toList());
@@ -85,7 +85,7 @@ public class DynamoDbTestDataFactory {
                 .build();
     }
 
-    public static List<Object> factDataList() {
+    public static List<Fact> factDataList() {
         return IntStream.range(0, FACT_DATA.length)
                 .mapToObj(i -> fact(i + 1))
                 .collect(Collectors.toList());

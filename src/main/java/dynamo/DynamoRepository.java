@@ -1,13 +1,17 @@
 package dynamo;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.TransactionWriteRequest;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import dynamo.model.Fact;
 import dynamo.model.Person;
 import dynamo.model.Siblings;
+import org.apache.commons.collections4.ListUtils;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import static dynamo.DynamoClient.getDynamoMapper;
 import static dynamo.DynamoClient.getDynamoMapperConfig;
@@ -155,5 +159,20 @@ public class DynamoRepository {
                 .stream()
                 .sorted(Comparator.comparing(Person::getName))
                 .collect(toList());
+    }
+
+    public void load(List<Person> peopleDataList, List<Fact> factDataList) {
+        List<Object> allData = Stream.concat(peopleDataList.stream(), factDataList.stream())
+                .collect(toList());
+
+        ListUtils.partition(allData, 25)
+                .forEach(this::addWithTransaction);
+    }
+
+    private void addWithTransaction(List<Object> batch) {
+        DynamoDBMapper mapper = DynamoClient.getDynamoMapper();
+        TransactionWriteRequest transactionWriteRequest = new TransactionWriteRequest();
+        batch.forEach(transactionWriteRequest::addPut);
+        mapper.transactionWrite(transactionWriteRequest, DynamoClient.getDynamoMapperConfig());
     }
 }
