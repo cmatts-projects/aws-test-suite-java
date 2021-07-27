@@ -1,4 +1,4 @@
-package model;
+package dynamo.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

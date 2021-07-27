@@ -3,9 +3,9 @@ package dynamo;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import model.Fact;
-import model.Person;
-import model.Siblings;
+import dynamo.model.Fact;
+import dynamo.model.Person;
+import dynamo.model.Siblings;
 
 import java.util.*;
 

@@ -1,8 +1,8 @@
 package dynamo;
 
-import model.Fact;
-import model.Person;
-import model.Siblings;
+import dynamo.model.Fact;
+import dynamo.model.Person;
+import dynamo.model.Siblings;
 
 import java.util.List;
 import java.util.stream.Collectors;
