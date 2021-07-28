@@ -1,6 +1,7 @@
 package dynamo;
 
 import cloudformation.CloudFormationClientFactory;
+import com.amazonaws.services.dynamodbv2.model.TransactionCanceledException;
 import dynamo.model.Fact;
 import dynamo.model.Person;
 import dynamo.model.Siblings;
@@ -20,7 +21,9 @@ import java.util.Optional;
 
 import static cloudformation.DynamoStackRequestFactory.createDynamoDbStackRequest;
 import static dynamo.DynamoDbTestDataFactory.*;
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.CLOUDFORMATION;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.DYNAMODB;
 
@@ -119,4 +122,41 @@ class DynamoRepositoryTest {
         assertThat(people.get(1).getName()).isEqualTo("Mr Test");
     }
 
+    @Test
+    void shouldUpdateEntities() {
+        Person person = repo.findPerson(21).get();
+        person.setYearOfBirth(1799);
+        person.setYearOfDeath(1888);
+
+        Fact fact = repo.findFacts(21).get(0);
+        fact.setImage("Updated");
+        fact.setDescription("A changed description");
+
+        repo.updateEntities(asList(person, fact));
+
+        Person updatedPerson = repo.findPerson(21).get();
+        Fact updatedFact = repo.findFacts(21).get(0);
+
+        assertThat(updatedPerson.toString()).isEqualTo(person.toString());
+        assertThat(updatedFact.toString()).isEqualTo(fact.toString());
+    }
+
+    @Test
+    void shouldHandleOptimisticLockingOfEntities() {
+        Person person = repo.findPerson(21).get();
+        person.setYearOfBirth(1699);
+
+        Fact fact = repo.findFacts(21).get(0);
+        fact.setDescription("This has an older version");
+        fact.setVersion(fact.getVersion() - 1);
+
+        assertThatThrownBy(() -> repo.updateEntities(asList(person, fact)))
+            .isInstanceOf(TransactionCanceledException.class);
+
+        Person updatedPerson = repo.findPerson(21).get();
+        Fact updatedFact = repo.findFacts(21).get(0);
+
+        assertThat(updatedPerson.toString()).isNotEqualTo(person.toString());
+        assertThat(updatedFact.toString()).isNotEqualTo(fact.toString());
+    }
 }

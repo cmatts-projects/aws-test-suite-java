@@ -26,6 +26,8 @@ Features:
 * Searching by GSI
 * Use of DynamoDBMapper and annotations
 * Table name prefix override configuration
+* Optimistic locking
+* Transactions
 * Localstack test container for DynamoDB and Cloudformation
 * Lombok based pojo's
 

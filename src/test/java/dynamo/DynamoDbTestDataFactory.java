@@ -43,7 +43,8 @@ public class DynamoDbTestDataFactory {
                 {1, 1902, "resource1", null, "fact2"},
                 {1, 1892, null, "source1", "fact3"},
                 {2, 1852, "resource3", null, "fact4"},
-                {3, 1872, "resource4", null, "fact5"}
+                {3, 1872, "resource4", null, "fact5"},
+                {21, 1872, "Original", null, "some facts"}
             };
 
     public static final Siblings PERSON_1_SIBLINGS = Siblings.builder()
@@ -82,6 +83,7 @@ public class DynamoDbTestDataFactory {
                 .motherId((Integer) PEOPLE_DATA[index][2])
                 .yearOfBirth((Integer) PEOPLE_DATA[index][3])
                 .yearOfDeath((Integer) PEOPLE_DATA[index][4])
+                .version(1L)
                 .build();
     }
 
@@ -100,6 +102,7 @@ public class DynamoDbTestDataFactory {
                 .image((String) FACT_DATA[index][2])
                 .source((String) FACT_DATA[index][3])
                 .description((String) FACT_DATA[index][4])
+                .version(1L)
                 .build();
     }
 

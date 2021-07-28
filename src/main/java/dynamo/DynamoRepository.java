@@ -8,7 +8,6 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import dynamo.model.Fact;
 import dynamo.model.Person;
 import dynamo.model.Siblings;
-import org.apache.commons.collections4.ListUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -96,7 +95,7 @@ public class DynamoRepository {
                 .concat(findPersonByFather(person.getFatherId()).stream(),
                         findPersonByMother(person.getMotherId()).stream())
                 .collect(Collectors.toSet());
-        
+
         return new Siblings(person, allSiblings, extractParents(allSiblings));
     }
 
@@ -122,17 +121,16 @@ public class DynamoRepository {
     }
 
     public void load(List<Person> peopleDataList, List<Fact> factDataList) {
+        DynamoDBMapper mapper = DynamoClient.getDynamoMapper();
         List<Object> allData = Stream.concat(peopleDataList.stream(), factDataList.stream())
                 .collect(toList());
-
-        ListUtils.partition(allData, 25)
-                .forEach(this::addWithTransaction);
+        mapper.batchWrite(allData, emptyList(), DynamoClient.getDynamoMapperConfig());
     }
 
-    private void addWithTransaction(List<Object> batch) {
+    public void updateEntities(List<Object> entities) {
         DynamoDBMapper mapper = DynamoClient.getDynamoMapper();
         TransactionWriteRequest transactionWriteRequest = new TransactionWriteRequest();
-        batch.forEach(transactionWriteRequest::addPut);
+        entities.forEach(transactionWriteRequest::addUpdate);
         mapper.transactionWrite(transactionWriteRequest, DynamoClient.getDynamoMapperConfig());
     }
 }

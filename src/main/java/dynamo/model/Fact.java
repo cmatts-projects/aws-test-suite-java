@@ -3,6 +3,7 @@ package dynamo.model;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBVersionAttribute;
 import lombok.*;
 
 @Data
@@ -20,4 +21,6 @@ public class Fact {
     private String image;
     private String source;
     private String description;
+    @DynamoDBVersionAttribute
+    private Long version;
 }
