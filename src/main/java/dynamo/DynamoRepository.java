@@ -11,6 +11,7 @@ import dynamo.model.Siblings;
 import org.apache.commons.collections4.ListUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static dynamo.DynamoClient.getDynamoMapper;
@@ -91,16 +92,12 @@ public class DynamoRepository {
         }
         Person person = p.get();
 
-        Set<Person> allSiblings = new HashSet<>();
-        allSiblings.addAll(findPersonByFather(person.getFatherId()));
-        allSiblings.addAll(findPersonByMother(person.getMotherId()));
-
-        return Siblings.builder()
-                .fullSiblings(extractFullSiblings(person, allSiblings))
-                .stepByFather(extractStepSiblingsByFather(person, allSiblings))
-                .stepByMother(extractStepSiblingsByMother(person, allSiblings))
-                .parents(extractParents(allSiblings))
-                .build();
+        Set<Person> allSiblings = Stream
+                .concat(findPersonByFather(person.getFatherId()).stream(),
+                        findPersonByMother(person.getMotherId()).stream())
+                .collect(Collectors.toSet());
+        
+        return new Siblings(person, allSiblings, extractParents(allSiblings));
     }
 
     private List<Person> extractParents(Set<Person> allSiblings) {
@@ -113,43 +110,6 @@ public class DynamoRepository {
                 .map(Optional::get)
                 .sorted(Comparator.comparing(Person::getId))
                 .collect(toList());
-    }
-
-    private List<Person> extractStepSiblingsByMother(Person person, Set<Person> allSiblings) {
-        return allSiblings.stream()
-                .filter(s -> !Objects.equals(s.getFatherId(), person.getFatherId()) &&
-                        Objects.equals(s.getMotherId(), person.getMotherId()))
-                .sorted((a, b) -> sortByParentYear(a, b, a.getFatherId(), b.getFatherId()))
-                .collect(toList());
-    }
-
-    private List<Person> extractStepSiblingsByFather(Person person, Set<Person> allSiblings) {
-        return allSiblings.stream()
-                .filter(s -> Objects.equals(s.getFatherId(), person.getFatherId()) &&
-                        !Objects.equals(s.getMotherId(), person.getMotherId()))
-                .sorted((a, b) -> sortByParentYear(a, b, a.getMotherId(), b.getMotherId()))
-                .collect(toList());
-    }
-
-    private List<Person> extractFullSiblings(Person person, Set<Person> allSiblings) {
-        return allSiblings.stream()
-                .filter(s -> Objects.equals(s.getFatherId(), person.getFatherId()) &&
-                        Objects.equals(s.getMotherId(), person.getMotherId()))
-                .sorted((a, b) -> (a.getYearOfBirth() > b.getYearOfBirth() ||
-                        (Objects.equals(a.getYearOfBirth(), b.getYearOfBirth()) && a.getId() > b.getId())) ? 1 : -1)
-                .collect(toList());
-    }
-
-    private int sortByParentYear(Person a, Person b, Integer aParentId, Integer bParentId) {
-        return
-            (Objects.equals(aParentId, bParentId) &&
-                (b.getYearOfBirth() == null ||
-                    (a.getYearOfBirth() != null && (a.getYearOfBirth() > b.getYearOfBirth() ||
-                        (Objects.equals(a.getYearOfBirth(), b.getYearOfBirth()) && a.getId() > b.getId())))))
-            ||
-            (!Objects.equals(aParentId, bParentId) &&
-                ((aParentId != null && bParentId == null) || (aParentId != null && aParentId > bParentId)))
-            ? 1 : -1;
     }
 
     public List<Person> findPeople() {
