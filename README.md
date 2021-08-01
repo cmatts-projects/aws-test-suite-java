@@ -31,3 +31,12 @@ Features:
 * Localstack test container for DynamoDB and Cloudformation
 * Lombok based pojo's
 
+## Cloudwatch
+The cloudwatch example demonstrates some basic logging of cloudwatch metrics and extracting statistics.
+
+Features:
+* Bulk logging of metrics
+* Getting average statistics from metrics
+* Localstack test container for Cloudwatch
+
+

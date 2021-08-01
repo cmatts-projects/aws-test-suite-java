@@ -31,7 +31,7 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 @ExtendWith(SystemStubsExtension.class)
 class DynamoRepositoryTest {
 
-    private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.7");
+    private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
 
     @SystemStub
     private static EnvironmentVariables environmentVariables;
