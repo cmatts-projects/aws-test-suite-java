@@ -39,4 +39,12 @@ Features:
 * Getting average statistics from metrics
 * Localstack test container for Cloudwatch
 
+## Kinesis Streams
+The Kinesis example demonstrates how to send and retrieve messages using a Kinesis data stream.
+
+Features:
+* Creation of a stream
+* Waiting for the stream to be active
+* Use of a Kinesis Producer to batch message send requests
+* Listening to a Kinesis stream and collecting messages
 

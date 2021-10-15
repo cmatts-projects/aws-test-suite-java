@@ -12,9 +12,12 @@
     <properties>
         <java.version>11</java.version>
         <aws.version>1.12.20</aws.version>
+        <aws.kinesis.version>0.14.9</aws.kinesis.version>
         <junit.version>5.7.2</junit.version>
         <testcontainers.version>1.15.3</testcontainers.version>
         <lombok.version>1.18.20</lombok.version>
+        <retry4j.version>0.15.0</retry4j.version>
+        <awaitility.version>3.0.0</awaitility.version>
     </properties>
 
     <dependencies>
@@ -23,6 +26,11 @@
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk</artifactId>
             <version>${aws.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>amazon-kinesis-producer</artifactId>
+            <version>${aws.kinesis.version}</version>
         </dependency>
 
         <!-- Project lombok -->
@@ -38,6 +46,17 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.evanlennick</groupId>
+            <artifactId>retry4j</artifactId>
+            <version>${retry4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>${awaitility.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- Junit5 Dependencies -->

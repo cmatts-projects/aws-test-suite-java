@@ -12,12 +12,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.amazonaws.services.cloudwatch.model.Statistic.Average;
 import static java.time.ZoneOffset.UTC;
-
-;
 
 public class CloudWatchClient {
 
@@ -86,9 +83,7 @@ public class CloudWatchClient {
         GetMetricStatisticsResult response = getCloudWatchClient().getMetricStatistics(request);
 
         Optional<Datapoint> datapoint = response.getDatapoints().stream().findFirst();
-        if (datapoint.isPresent()) {
-            return datapoint.get().getAverage();
-        }
-        return 0;
+
+        return datapoint.map(Datapoint::getAverage).orElse(0d);
     }
 }
