@@ -48,3 +48,12 @@ Features:
 * Use of a Kinesis Producer to batch message send requests
 * Listening to a Kinesis stream and collecting messages
 
+## S3
+The S3 example demonstrates how to store and retrieve content in an S3 bucket
+
+Features:
+* Creation of an S3 bucket
+* Verifying that a bucket exists
+* Writing content to S3
+* Reading content from S3
+* Verifying that an S3 object exists
