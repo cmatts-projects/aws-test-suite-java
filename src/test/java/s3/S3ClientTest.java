@@ -70,8 +70,9 @@ class S3ClientTest {
         InputStream expectedInputStream = this.getClass().getClassLoader().getResourceAsStream("MyFile.txt");
         String expectedFileContent = new String(expectedInputStream.readAllBytes(), UTF_8);
 
-        String actualFileContent = new String(s3Client.readFromBucket(s3Url).readAllBytes(), UTF_8);
-
-        assertThat(actualFileContent).isEqualTo(expectedFileContent);
+        try(InputStream s3InputStream = s3Client.readFromBucket(s3Url)) {
+            String actualFileContent = new String(s3InputStream.readAllBytes(), UTF_8);
+            assertThat(actualFileContent).isEqualTo(expectedFileContent);
+        }
     }
 }
