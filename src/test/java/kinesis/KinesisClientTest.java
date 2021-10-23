@@ -45,7 +45,7 @@ class KinesisClientTest {
     private static KinesisClient kinesisClient;
 
     @BeforeAll
-    static void beforeAll() throws Exception {
+    static void beforeAll() {
         environmentVariables
                 .set("AWS_ACCESS_KEY", LOCAL_STACK_CONTAINER.getAccessKey())
                 .set("AWS_SECRET_ACCESS_KEY", LOCAL_STACK_CONTAINER.getSecretKey())

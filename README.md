@@ -49,7 +49,7 @@ Features:
 * Listening to a Kinesis stream and collecting messages
 
 ## S3
-The S3 example demonstrates how to store and retrieve content in an S3 bucket
+The S3 example demonstrates how to store and retrieve content in an S3 bucket.
 
 Features:
 * Creation of an S3 bucket
@@ -57,3 +57,12 @@ Features:
 * Writing content to S3
 * Reading content from S3
 * Verifying that an S3 object exists
+
+## Secrets Manager
+The secrets manager examples demonstrate how to create, read and update secrets.
+
+Features:
+* Creation of a secret
+* Updating a secret
+* Reading a secret
+

@@ -35,7 +35,7 @@ class S3ClientTest {
     private static S3Client s3Client;
 
     @BeforeAll
-    static void beforeAll() throws Exception {
+    static void beforeAll() {
         environmentVariables
                 .set("AWS_ACCESS_KEY", LOCAL_STACK_CONTAINER.getAccessKey())
                 .set("AWS_SECRET_ACCESS_KEY", LOCAL_STACK_CONTAINER.getSecretKey())
