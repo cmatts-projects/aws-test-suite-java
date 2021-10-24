@@ -50,7 +50,7 @@ class S3ClientTest {
     void shouldCreateBucket() {
         s3Client.createBucket(TEST_BUCKET);
 
-        assertThat(s3Client.bucketExists(TEST_BUCKET));
+        assertThat(s3Client.bucketExists(TEST_BUCKET)).isTrue();
     }
 
     @Test

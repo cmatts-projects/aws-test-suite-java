@@ -72,3 +72,11 @@ The parameter store examples demonstrate how to create and read parameters.
 Features:
 * Creation of a parameter
 * Reading a parameter
+
+## SQS
+The Sqs eamples demonstrate how to create queues and send and receive messages
+
+Features:
+* Creation of a queue
+* Sending messages to a queue
+* Receiving messages from a queue
