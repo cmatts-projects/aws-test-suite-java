@@ -14,7 +14,7 @@ public class S3Client {
 
     private AmazonS3 client;
 
-    private AmazonS3 getS3Client() {
+    public AmazonS3 getS3Client() {
         if (client != null) {
             return client;
         }

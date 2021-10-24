@@ -80,3 +80,5 @@ Features:
 * Creation of a queue
 * Sending messages to a queue
 * Receiving messages from a queue
+* S3 support for large messages
+* Queue purging

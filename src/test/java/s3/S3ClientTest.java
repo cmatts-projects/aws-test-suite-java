@@ -43,18 +43,16 @@ class S3ClientTest {
                 .set("AWS_REGION", LOCAL_STACK_CONTAINER.getRegion());
 
         s3Client = new S3Client();
+        s3Client.createBucket(TEST_BUCKET);
     }
 
     @Test
-    @Order(value = 1)
-    void shouldCreateBucket() {
-        s3Client.createBucket(TEST_BUCKET);
-
+    void shouldExist() {
         assertThat(s3Client.bucketExists(TEST_BUCKET)).isTrue();
     }
 
     @Test
-    @Order(value = 2)
+    @Order(value = 1)
     void shouldWriteToBucket() throws Exception {
         String s3Url = "s3://mybucket/test/resources/MyFile.txt";
         File localFile = Paths.get(this.getClass().getClassLoader().getResource("MyFile.txt").toURI()).toFile();
@@ -64,7 +62,7 @@ class S3ClientTest {
     }
 
     @Test
-    @Order(value = 3)
+    @Order(value = 2)
     void shouldReadFromBucket() throws Exception {
         String s3Url = "s3://mybucket/test/resources/MyFile.txt";
         InputStream expectedInputStream = this.getClass().getClassLoader().getResourceAsStream("MyFile.txt");

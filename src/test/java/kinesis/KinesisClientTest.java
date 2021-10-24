@@ -2,7 +2,10 @@ package kinesis;
 
 import com.amazonaws.SDKGlobalConfiguration;
 import com.amazonaws.services.kinesis.model.Record;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -31,6 +34,8 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 class KinesisClientTest {
     private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
     private static final String MY_STREAM = "myStream";
+    private static final String A_MESSAGE = "A message";
+    private static final String ANOTHER_MESSAGE = "Another message";
 
     @SystemStub
     private static EnvironmentVariables environmentVariables;
@@ -58,34 +63,32 @@ class KinesisClientTest {
                 .set(SdkSystemSetting.CBOR_ENABLED.property(), "false");
 
         kinesisClient = new KinesisClient();
+        kinesisClient.createStream(MY_STREAM, 1);
     }
 
     @Test
-    @Order(value = 1)
-    void shouldCreateKinesisStream() {
-        kinesisClient.createStream(MY_STREAM, 1);
+    void shouldBeActiveKinesisStream() {
         assertThat(kinesisClient.getStreamStatus()).isEqualTo("ACTIVE");
     }
 
     @Test
-    @Order(value = 2)
     void shouldSendAndRetrieveMessageWithStream() {
         kinesisClient.startKinesisListener();
-        kinesisClient.sendToKinesis(List.of("A message", "Another message"));
-        List<Record> records = retrieveRecordFromKinesis(2);
+        kinesisClient.sendToKinesis(List.of(A_MESSAGE, ANOTHER_MESSAGE));
+        List<Record> records = retrieveRecordsFromKinesis(2);
         kinesisClient.stopKinesisListener();
 
         List<String> receivedMessages = records.stream()
                 .map(r -> UTF_8.decode(r.getData()).toString()).collect(toList());
 
         assertThat(receivedMessages)
-                .containsExactlyInAnyOrder("A message", "Another message");
+                .containsExactlyInAnyOrder(A_MESSAGE, ANOTHER_MESSAGE);
 
         List<Record> moreRecords = kinesisClient.getReceivedRecords();
         assertThat(moreRecords).hasSize(0);
     }
 
-    private List<Record> retrieveRecordFromKinesis(int numberOfRecords) {
+    private List<Record> retrieveRecordsFromKinesis(int numberOfRecords) {
         List<Record> records = new ArrayList<>();
 
         await().atLeast(ONE_HUNDRED_MILLISECONDS)
