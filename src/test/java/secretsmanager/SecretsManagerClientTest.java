@@ -16,7 +16,7 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 @Testcontainers
 @ExtendWith(SystemStubsExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class SecretsClientTest {
+class SecretsManagerClientTest {
     private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
     private static final String SECRET_NAME = "MY_SECRET";
     private static final String SECRET_VALUE = "{ \"mySecret\": \"mySecretValue\" }";
@@ -28,7 +28,7 @@ class SecretsClientTest {
     private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer(IMAGE)
             .withServices(SECRETSMANAGER);
 
-    private static SecretsClient secretsClient;
+    private static SecretsManagerClient secretsManagerClient;
 
     @BeforeAll
     static void beforeAll() {
@@ -38,27 +38,27 @@ class SecretsClientTest {
                 .set("LOCAL_SECRETS_MANAGER_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(SECRETSMANAGER).toString())
                 .set("AWS_REGION", LOCAL_STACK_CONTAINER.getRegion());
 
-        secretsClient = new SecretsClient();
+        secretsManagerClient = new SecretsManagerClient();
     }
 
     @Test
     @Order(value = 1)
     void shouldCreateSecrets() {
-        assertThat(secretsClient.createSecret(SECRET_NAME, SECRET_VALUE)).isNotBlank();
+        assertThat(secretsManagerClient.createSecret(SECRET_NAME, SECRET_VALUE)).isNotBlank();
     }
 
     @Test
     @Order(value = 2)
     void shouldReadSecrets() {
-        assertThat(secretsClient.readSecret(SECRET_NAME)).isEqualTo(SECRET_VALUE);
+        assertThat(secretsManagerClient.readSecret(SECRET_NAME)).isEqualTo(SECRET_VALUE);
     }
 
     @Test
     @Order(value = 3)
     void shouldUpdateSecrets() {
         String secret = "{ \"mySecret\": \"mySecretValue\", \"myUpdateSecret\": \"myUpdatedSecretValue\"}";
-        secretsClient.updateSecret(SECRET_NAME, secret);
+        secretsManagerClient.updateSecret(SECRET_NAME, secret);
 
-        assertThat(secretsClient.readSecret(SECRET_NAME)).isEqualTo(secret);
+        assertThat(secretsManagerClient.readSecret(SECRET_NAME)).isEqualTo(secret);
     }
 }

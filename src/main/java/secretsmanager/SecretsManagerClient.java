@@ -8,7 +8,7 @@ import com.amazonaws.services.secretsmanager.model.CreateSecretResult;
 import com.amazonaws.services.secretsmanager.model.GetSecretValueRequest;
 import com.amazonaws.services.secretsmanager.model.PutSecretValueRequest;
 
-public class SecretsClient {
+public class SecretsManagerClient {
 
     private AWSSecretsManager client;
 

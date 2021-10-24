@@ -66,3 +66,9 @@ Features:
 * Updating a secret
 * Reading a secret
 
+## Parameter Store
+The parameter store examples demonstrate how to create and read parameters.
+
+Features:
+* Creation of a parameter
+* Reading a parameter
