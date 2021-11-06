@@ -74,7 +74,7 @@ Features:
 * Reading a parameter
 
 ## SQS
-The Sqs eamples demonstrate how to create queues and send and receive messages
+The Sqs examples demonstrate how to create queues and send and receive messages.
 
 Features:
 * Creation of a queue
@@ -82,3 +82,13 @@ Features:
 * Receiving messages from a queue
 * S3 support for large messages
 * Queue purging
+
+## Lambda
+The Lambda examples demonstrate how to handle events from a variety of sources.
+
+Features:
+* Simple object event handling
+* Stream event object handling
+* Sqs event handling
+* Extended Sqs event handling
+ 
