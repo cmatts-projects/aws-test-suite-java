@@ -20,10 +20,10 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 
 @Testcontainers
 @ExtendWith(SystemStubsExtension.class)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class S3ClientTest {
     private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
     private static final String TEST_BUCKET = "mybucket";
+    private static final String TEST_CONTENT = "{ \"content\": \"some content\" }";
 
     @SystemStub
     private static EnvironmentVariables environmentVariables;
@@ -47,13 +47,12 @@ class S3ClientTest {
     }
 
     @Test
-    void shouldExist() {
+    void shouldCheckBucketExist() {
         assertThat(s3Client.bucketExists(TEST_BUCKET)).isTrue();
     }
 
     @Test
-    @Order(value = 1)
-    void shouldWriteToBucket() throws Exception {
+    void shouldWriteFileToBucket() throws Exception {
         String s3Url = "s3://mybucket/test/resources/MyFile.txt";
         File localFile = Paths.get(this.getClass().getClassLoader().getResource("MyFile.txt").toURI()).toFile();
         s3Client.writeToBucket(s3Url, localFile);
@@ -62,15 +61,21 @@ class S3ClientTest {
     }
 
     @Test
-    @Order(value = 2)
+    void shouldWriteStringToBucket() throws Exception {
+        String s3Url = "s3://mybucket/test/resources/MyContent.txt";
+        s3Client.writeToBucket(s3Url, TEST_CONTENT);
+
+        assertThat(s3Client.fileExists(s3Url)).isTrue();
+    }
+
+    @Test
     void shouldReadFromBucket() throws Exception {
-        String s3Url = "s3://mybucket/test/resources/MyFile.txt";
-        InputStream expectedInputStream = this.getClass().getClassLoader().getResourceAsStream("MyFile.txt");
-        String expectedFileContent = new String(expectedInputStream.readAllBytes(), UTF_8);
+        String s3Url = "s3://mybucket/test/resources/readFile.txt";
+        s3Client.writeToBucket(s3Url, TEST_CONTENT);
 
         try(InputStream s3InputStream = s3Client.readFromBucket(s3Url)) {
             String actualFileContent = new String(s3InputStream.readAllBytes(), UTF_8);
-            assertThat(actualFileContent).isEqualTo(expectedFileContent);
+            assertThat(actualFileContent).isEqualTo(TEST_CONTENT);
         }
     }
 }

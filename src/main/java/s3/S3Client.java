@@ -51,6 +51,17 @@ public class S3Client {
         }
     }
 
+    public void writeToBucket(String s3Url, String content) throws IllegalArgumentException {
+        try {
+            URI uri = new URI(s3Url);
+            assert uri.getScheme().equalsIgnoreCase("s3");
+
+            getS3Client().putObject(uri.getHost(), uri.getPath(), content);
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException("Invalid s3 url");
+        }
+    }
+
     public boolean fileExists(String s3Url) {
         try {
             URI uri = new URI(s3Url);

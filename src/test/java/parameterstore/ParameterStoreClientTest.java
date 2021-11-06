@@ -1,9 +1,7 @@
 package parameterstore;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -18,7 +16,6 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 
 @Testcontainers
 @ExtendWith(SystemStubsExtension.class)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ParameterStoreClientTest {
     private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
     private static final String PARAMETER_NAME = "MY_PARAMETER";
