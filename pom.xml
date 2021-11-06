@@ -19,6 +19,8 @@
         <retry4j.version>0.15.0</retry4j.version>
         <awaitility.version>3.0.0</awaitility.version>
         <aws.sqs.extended.client.version>1.2.2</aws.sqs.extended.client.version>
+        <aws.lambda.version>1.2.1</aws.lambda.version>
+        <aws.lambda.events.version>3.10.0</aws.lambda.events.version>
     </properties>
 
     <dependencies>
@@ -38,6 +40,16 @@
             <artifactId>amazon-sqs-java-extended-client-lib</artifactId>
             <version>${aws.sqs.extended.client.version}</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-lambda-java-core</artifactId>
+            <version>${aws.lambda.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-lambda-java-events</artifactId>
+            <version>${aws.lambda.events.version}</version>
         </dependency>
 
         <!-- Project lombok -->

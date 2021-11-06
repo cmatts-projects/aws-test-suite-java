@@ -21,6 +21,10 @@ public class SqsClient {
     private AmazonSQS client;
     private AmazonSQS extendedClient;
 
+    public SqsClient() {
+        extendedClientBucket = null;
+    }
+
     public SqsClient(String extendedClientBucket) {
         this.extendedClientBucket = extendedClientBucket;
     }
@@ -44,6 +48,10 @@ public class SqsClient {
     }
 
     private AmazonSQS getSqsExtendedClient() {
+        if (extendedClientBucket == null) {
+            throw new UnsupportedOperationException("Sqs extended client bucket not configured");
+        }
+
         if (extendedClient != null) {
             return extendedClient;
         }
