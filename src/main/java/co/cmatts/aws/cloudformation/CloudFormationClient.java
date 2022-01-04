@@ -1,11 +1,13 @@
 package co.cmatts.aws.cloudformation;
 
-import com.amazonaws.client.builder.AwsClientBuilder;
+import co.cmatts.aws.client.Configuration;
 import com.amazonaws.services.cloudformation.AmazonCloudFormation;
 import com.amazonaws.services.cloudformation.AmazonCloudFormationClientBuilder;
 import com.amazonaws.services.cloudformation.model.CreateStackRequest;
 
 import java.io.IOException;
+
+import static co.cmatts.aws.client.Configuration.configureEndPoint;
 
 public class CloudFormationClient {
 
@@ -17,13 +19,7 @@ public class CloudFormationClient {
         }
 
         AmazonCloudFormationClientBuilder builder = AmazonCloudFormationClientBuilder.standard();
-        String localCloudWatchEndpoint = System.getenv("LOCAL_STACK_ENDPOINT");
-        String awsRegion = System.getenv("AWS_REGION");
-
-        if (localCloudWatchEndpoint != null && awsRegion != null) {
-            builder.withEndpointConfiguration(
-                    new AwsClientBuilder.EndpointConfiguration(localCloudWatchEndpoint, awsRegion));
-        }
+        configureEndPoint(builder);
 
         client = builder.build();
         return client;

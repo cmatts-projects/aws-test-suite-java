@@ -1,12 +1,14 @@
 package co.cmatts.aws.secretsmanager;
 
-import com.amazonaws.client.builder.AwsClientBuilder;
+import co.cmatts.aws.client.Configuration;
 import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
 import com.amazonaws.services.secretsmanager.model.CreateSecretRequest;
 import com.amazonaws.services.secretsmanager.model.CreateSecretResult;
 import com.amazonaws.services.secretsmanager.model.GetSecretValueRequest;
 import com.amazonaws.services.secretsmanager.model.PutSecretValueRequest;
+
+import static co.cmatts.aws.client.Configuration.configureEndPoint;
 
 public class SecretsManagerClient {
 
@@ -18,13 +20,7 @@ public class SecretsManagerClient {
         }
 
         AWSSecretsManagerClientBuilder builder = AWSSecretsManagerClientBuilder.standard();
-        String localSecretsManagerEndpoint = System.getenv("LOCAL_STACK_ENDPOINT");
-        String awsRegion = System.getenv("AWS_REGION");
-
-        if (localSecretsManagerEndpoint != null && awsRegion != null) {
-            builder.withEndpointConfiguration(
-                    new AwsClientBuilder.EndpointConfiguration(localSecretsManagerEndpoint, awsRegion));
-        }
+        configureEndPoint(builder);
 
         client = builder.build();
         return client;

@@ -1,6 +1,6 @@
 package co.cmatts.aws.cloudwatch;
 
-import com.amazonaws.client.builder.AwsClientBuilder;
+import co.cmatts.aws.client.Configuration;
 import com.amazonaws.services.cloudwatch.AmazonCloudWatch;
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchClientBuilder;
 import com.amazonaws.services.cloudwatch.model.*;
@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import static co.cmatts.aws.client.Configuration.configureEndPoint;
 import static com.amazonaws.services.cloudwatch.model.Statistic.Average;
 import static java.time.ZoneOffset.UTC;
 
@@ -26,13 +27,7 @@ public class CloudWatchClient {
         }
 
         AmazonCloudWatchClientBuilder builder = AmazonCloudWatchClientBuilder.standard();
-        String localCloudWatchEndpoint = System.getenv("LOCAL_STACK_ENDPOINT");
-        String awsRegion = System.getenv("AWS_REGION");
-
-        if (localCloudWatchEndpoint != null && awsRegion != null) {
-            builder.withEndpointConfiguration(
-                    new AwsClientBuilder.EndpointConfiguration(localCloudWatchEndpoint, awsRegion));
-        }
+        configureEndPoint(builder);
 
         client = builder.build();
         return client;

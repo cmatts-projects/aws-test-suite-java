@@ -1,10 +1,12 @@
 package co.cmatts.aws.parameterstore;
 
-import com.amazonaws.client.builder.AwsClientBuilder;
+import co.cmatts.aws.client.Configuration;
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement;
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagementClientBuilder;
 import com.amazonaws.services.simplesystemsmanagement.model.GetParameterRequest;
 import com.amazonaws.services.simplesystemsmanagement.model.PutParameterRequest;
+
+import static co.cmatts.aws.client.Configuration.configureEndPoint;
 
 public class ParameterStoreClient {
 
@@ -16,13 +18,7 @@ public class ParameterStoreClient {
         }
 
         AWSSimpleSystemsManagementClientBuilder builder = AWSSimpleSystemsManagementClientBuilder.standard();
-        String localParameterStoreEndpoint = System.getenv("LOCAL_STACK_ENDPOINT");
-        String awsRegion = System.getenv("AWS_REGION");
-
-        if (localParameterStoreEndpoint != null && awsRegion != null) {
-            builder.withEndpointConfiguration(
-                    new AwsClientBuilder.EndpointConfiguration(localParameterStoreEndpoint, awsRegion));
-        }
+        configureEndPoint(builder);
 
         client = builder.build();
         return client;

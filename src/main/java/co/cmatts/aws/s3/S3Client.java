@@ -1,6 +1,6 @@
 package co.cmatts.aws.s3;
 
-import com.amazonaws.client.builder.AwsClientBuilder;
+import co.cmatts.aws.client.Configuration;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.servicequotas.model.IllegalArgumentException;
@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+
+import static co.cmatts.aws.client.Configuration.configureEndPoint;
 
 public class S3Client {
 
@@ -20,13 +22,7 @@ public class S3Client {
         }
 
         AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard();
-        String localS3Endpoint = System.getenv("LOCAL_STACK_ENDPOINT");
-        String awsRegion = System.getenv("AWS_REGION");
-
-        if (localS3Endpoint != null && awsRegion != null) {
-            builder.withEndpointConfiguration(
-                    new AwsClientBuilder.EndpointConfiguration(localS3Endpoint, awsRegion));
-        }
+        configureEndPoint(builder);
 
         client = builder.build();
         return client;

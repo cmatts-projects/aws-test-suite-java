@@ -1,6 +1,6 @@
 package co.cmatts.aws.kinesis;
 
-import com.amazonaws.client.builder.AwsClientBuilder;
+import co.cmatts.aws.client.Configuration;
 import com.amazonaws.services.kinesis.AmazonKinesis;
 import com.amazonaws.services.kinesis.AmazonKinesisClientBuilder;
 import com.amazonaws.services.kinesis.model.Record;
@@ -23,6 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static co.cmatts.aws.client.Configuration.configureEndPoint;
 import static com.amazonaws.services.kinesis.model.ShardIteratorType.TRIM_HORIZON;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.temporal.ChronoUnit.SECONDS;
@@ -45,13 +46,7 @@ public class KinesisClient {
         }
 
         AmazonKinesisClientBuilder builder = AmazonKinesisClientBuilder.standard();
-        String localKinesisEndpoint = System.getenv("LOCAL_STACK_ENDPOINT");
-        String awsRegion = System.getenv("AWS_REGION");
-
-        if (localKinesisEndpoint != null && awsRegion != null) {
-            builder.withEndpointConfiguration(
-                    new AwsClientBuilder.EndpointConfiguration(localKinesisEndpoint, awsRegion));
-        }
+        configureEndPoint(builder);
 
         client = builder.build();
         return client;

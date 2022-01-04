@@ -1,10 +1,12 @@
 package co.cmatts.aws.dynamo;
 
-import com.amazonaws.client.builder.AwsClientBuilder;
+import co.cmatts.aws.client.Configuration;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
+
+import static co.cmatts.aws.client.Configuration.configureEndPoint;
 
 public class DynamoClient {
 
@@ -18,13 +20,7 @@ public class DynamoClient {
         }
 
         AmazonDynamoDBClientBuilder builder = AmazonDynamoDBClientBuilder.standard();
-        String localDynamoDbEndpoint = System.getenv("LOCAL_STACK_ENDPOINT");
-        String awsRegion = System.getenv("AWS_REGION");
-
-        if (localDynamoDbEndpoint != null && awsRegion != null) {
-            builder.withEndpointConfiguration(
-                    new AwsClientBuilder.EndpointConfiguration(localDynamoDbEndpoint, awsRegion));
-        }
+        configureEndPoint(builder);
 
         client = builder.build();
         return client;
