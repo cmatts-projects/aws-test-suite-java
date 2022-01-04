@@ -40,7 +40,6 @@ public class CloudWatchClient {
 
         client = builder.build();
         return client;
-
     }
 
     public MetricDatum createMetric(String metricName, int value) {

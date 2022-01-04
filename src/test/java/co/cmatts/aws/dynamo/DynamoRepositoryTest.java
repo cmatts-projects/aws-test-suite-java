@@ -1,6 +1,6 @@
 package co.cmatts.aws.dynamo;
 
-import co.cmatts.aws.cloudformation.CloudFormationClientFactory;
+import co.cmatts.aws.cloudformation.CloudFormationClient;
 import co.cmatts.aws.dynamo.model.Fact;
 import co.cmatts.aws.dynamo.model.Person;
 import co.cmatts.aws.dynamo.model.Siblings;
@@ -19,7 +19,6 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static co.cmatts.aws.cloudformation.DynamoStackRequestFactory.createDynamoDbStackRequest;
 import static co.cmatts.aws.dynamo.DynamoDbTestDataFactory.*;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,6 +31,7 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 class DynamoRepositoryTest {
 
     private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
+    private static final String DYNAMO_TABLES_YML = "dynamo-tables.yml";
 
     @SystemStub
     private static EnvironmentVariables environmentVariables;
@@ -39,8 +39,6 @@ class DynamoRepositoryTest {
     @Container
     private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer(IMAGE)
             .withServices(DYNAMODB, CLOUDFORMATION);
-
-    private static CloudFormationClientFactory cfClientFactory = new CloudFormationClientFactory(LOCAL_STACK_CONTAINER);
 
     private static DynamoRepository repo;
 
@@ -52,7 +50,7 @@ class DynamoRepositoryTest {
             .set("LOCAL_STACK_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(null).toString())
             .set("AWS_REGION", LOCAL_STACK_CONTAINER.getRegion());
 
-        cfClientFactory.createCloudformationClient().createStack(createDynamoDbStackRequest());
+        CloudFormationClient.createStack("DynamoDB", DYNAMO_TABLES_YML);
 
         repo = new DynamoRepository();
         repo.load(peopleDataList(), factDataList());
