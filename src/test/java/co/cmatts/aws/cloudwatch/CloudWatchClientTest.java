@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static co.cmatts.aws.cloudwatch.CloudWatchClient.*;
 import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.CLOUDWATCH;
@@ -27,6 +28,10 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 class CloudWatchClientTest {
     private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
     private static final int NUMBER_METRICS = 100;
+    private static final String MY_DIMENSION = "myDimension";
+    private static final String MY_COUNT = "myCount";
+    private static final String MY_NAMESPACE = "myNamespace";
+    private static final String MY_METRIC_NAME = "myMetricName";
 
     @SystemStub
     private static EnvironmentVariables environmentVariables;
@@ -35,8 +40,6 @@ class CloudWatchClientTest {
     private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer(IMAGE)
             .withServices(CLOUDWATCH);
 
-    private static CloudWatchClient cloudWatchClient;
-
     @BeforeAll
     static void beforeAll() {
         environmentVariables
@@ -44,8 +47,6 @@ class CloudWatchClientTest {
                 .set("AWS_SECRET_ACCESS_KEY", LOCAL_STACK_CONTAINER.getSecretKey())
                 .set("LOCAL_STACK_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(null).toString())
                 .set("AWS_REGION", LOCAL_STACK_CONTAINER.getRegion());
-
-        cloudWatchClient = new CloudWatchClient();
     }
 
     @Test
@@ -54,10 +55,10 @@ class CloudWatchClientTest {
         List<MetricDatum> metrics = new ArrayList<>();
         for (int i = 0; i < NUMBER_METRICS; i++) {
             Date timestamp = Date.from(LocalDateTime.now().minusDays(i).toInstant(UTC));
-            metrics.add(cloudWatchClient.createMetric("metricName", i).withTimestamp(timestamp));
+            metrics.add(createMetric(MY_DIMENSION, MY_COUNT, MY_METRIC_NAME, i).withTimestamp(timestamp));
         }
 
-        List<PutMetricDataResult> response = cloudWatchClient.logMetrics(metrics);
+        List<PutMetricDataResult> response = logMetrics(metrics, MY_NAMESPACE);
 
         int expectedBatches = (NUMBER_METRICS + 24) / 25;
         assertThat(response).hasSize(expectedBatches);
@@ -70,6 +71,6 @@ class CloudWatchClientTest {
     @Test
     @Order(value = 2)
     void shouldGetMetrics() {
-        assertThat(cloudWatchClient.getAverageForDays("metricName", 30)).isEqualTo(14.5d);
+        assertThat(getAverageForDays(30, MY_DIMENSION, MY_COUNT, MY_NAMESPACE, MY_METRIC_NAME)).isEqualTo(14.5d);
     }
 }

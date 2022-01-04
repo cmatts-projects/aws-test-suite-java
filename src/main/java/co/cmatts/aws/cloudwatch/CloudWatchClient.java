@@ -18,13 +18,9 @@ import static java.time.ZoneOffset.UTC;
 
 public class CloudWatchClient {
 
-    private static final String MY_DIMENSION = "myDimension";
-    private static final String MY_COUNT = "myCount";
-    private static final String MY_NAMESPACE = "myNamespace";
+    private static AmazonCloudWatch client;
 
-    private AmazonCloudWatch client;
-
-    private AmazonCloudWatch getCloudWatchClient() {
+    private static AmazonCloudWatch getCloudWatchClient() {
         if (client != null) {
             return client;
         }
@@ -42,10 +38,10 @@ public class CloudWatchClient {
         return client;
     }
 
-    public MetricDatum createMetric(String metricName, int value) {
+    public static MetricDatum createMetric(String dimensionName, String dimensionValue, String metricName, int value) {
         Dimension dimension = new Dimension()
-                .withName(MY_DIMENSION)
-                .withValue(MY_COUNT);
+                .withName(dimensionName)
+                .withValue(dimensionValue);
         return new MetricDatum()
                 .withMetricName(metricName)
                 .withValue((double)value)
@@ -53,19 +49,19 @@ public class CloudWatchClient {
                 .withDimensions(dimension);
     }
 
-    public List<PutMetricDataResult> logMetrics(List<MetricDatum> metrics) {
+    public static List<PutMetricDataResult> logMetrics(List<MetricDatum> metrics, String namespace) {
         List<PutMetricDataResult> response = new ArrayList<>();
         ListUtils.partition(metrics, 25)
                 .forEach(metricsBatch -> {
                     PutMetricDataRequest request = new PutMetricDataRequest()
                             .withMetricData(metricsBatch)
-                            .withNamespace(MY_NAMESPACE);
+                            .withNamespace(namespace);
                     response.add(getCloudWatchClient().putMetricData(request));
                 });
         return response;
     }
 
-    public double getAverageForDays(String metricName, int days) {
+    public static double getAverageForDays(int days, String dimensionName, String dimensionValue, String namespace, String metricName) {
         LocalDateTime now = LocalDateTime.now();
         Date startTime = Date.from(now.minusDays(days).toInstant(UTC));
         Date endTime = Date.from(now.toInstant(UTC));
@@ -75,9 +71,9 @@ public class CloudWatchClient {
                 .withEndTime(endTime)
                 .withPeriod((int)TimeUnit.DAYS.toSeconds(days))
                 .withStatistics(Average)
-                .withNamespace(MY_NAMESPACE)
+                .withNamespace(namespace)
                 .withMetricName(metricName)
-                .withDimensions(new Dimension().withName(MY_DIMENSION).withValue(MY_COUNT));
+                .withDimensions(new Dimension().withName(dimensionName).withValue(dimensionValue));
 
         GetMetricStatisticsResult response = getCloudWatchClient().getMetricStatistics(request);
 
