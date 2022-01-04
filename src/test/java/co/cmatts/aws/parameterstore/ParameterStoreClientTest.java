@@ -11,6 +11,8 @@ import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
+import static co.cmatts.aws.parameterstore.ParameterStoreClient.readParameter;
+import static co.cmatts.aws.parameterstore.ParameterStoreClient.writeParameter;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SSM;
 
@@ -28,7 +30,6 @@ class ParameterStoreClientTest {
     @Container
     private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer(IMAGE)
             .withServices(SSM);
-    private static ParameterStoreClient parameterStoreClient;
 
     @BeforeAll
     static void beforeAll() {
@@ -37,13 +38,11 @@ class ParameterStoreClientTest {
                 .set("AWS_SECRET_ACCESS_KEY", LOCAL_STACK_CONTAINER.getSecretKey())
                 .set("LOCAL_STACK_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(null).toString())
                 .set("AWS_REGION", LOCAL_STACK_CONTAINER.getRegion());
-
-        parameterStoreClient = new ParameterStoreClient();
     }
 
     @Test
     void shouldAccessParameter() {
-        parameterStoreClient.writeParameter(PARAMETER_NAME, PARAMETER_VALUE, PARAMETER_DESCRIPTION);
-        assertThat(parameterStoreClient.readParameter(PARAMETER_NAME)).isEqualTo(PARAMETER_VALUE);
+        writeParameter(PARAMETER_NAME, PARAMETER_VALUE, PARAMETER_DESCRIPTION);
+        assertThat(readParameter(PARAMETER_NAME)).isEqualTo(PARAMETER_VALUE);
     }
 }

@@ -1,6 +1,5 @@
 package co.cmatts.aws.lambda;
 
-import co.cmatts.aws.s3.S3Client;
 import co.cmatts.aws.sqs.SqsClient;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
@@ -19,6 +18,8 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import java.util.ArrayList;
 import java.util.List;
 
+import static co.cmatts.aws.s3.S3Client.createBucket;
+import static co.cmatts.aws.s3.S3Client.resetS3Client;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
@@ -43,7 +44,6 @@ class LargeSqsEventHandlerTest {
             .withServices(SQS, S3);
 
     private static SqsClient sqsClient;
-    private static S3Client s3Client;
 
     @BeforeAll
     static void beforeAll() {
@@ -55,8 +55,8 @@ class LargeSqsEventHandlerTest {
                 .set("EXTENDED_CLIENT_BUCKET", TEST_QUEUE_BUCKET)
                 .set("AWS_REGION", LOCAL_STACK_CONTAINER.getRegion());
 
-        s3Client = new S3Client();
-        s3Client.createBucket(TEST_QUEUE_BUCKET);
+        resetS3Client();
+        createBucket(TEST_QUEUE_BUCKET);
         sqsClient = new SqsClient(TEST_QUEUE_BUCKET);
         sqsClient.createQueue(TEST_QUEUE);
     }

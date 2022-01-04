@@ -8,9 +8,9 @@ import com.amazonaws.services.simplesystemsmanagement.model.PutParameterRequest;
 
 public class ParameterStoreClient {
 
-    private AWSSimpleSystemsManagement client;
+    private static AWSSimpleSystemsManagement client;
 
-    private AWSSimpleSystemsManagement getParameterStoreClient() {
+    private static AWSSimpleSystemsManagement getParameterStoreClient() {
         if (client != null) {
             return client;
         }
@@ -28,7 +28,7 @@ public class ParameterStoreClient {
         return client;
     }
 
-    public void writeParameter(String parameterName, String parameterValue, String parameterDescription) {
+    public static void writeParameter(String parameterName, String parameterValue, String parameterDescription) {
         PutParameterRequest parameterRequest = new PutParameterRequest()
                 .withName(parameterName)
                 .withValue(parameterValue)
@@ -37,7 +37,7 @@ public class ParameterStoreClient {
         getParameterStoreClient().putParameter(parameterRequest);
     }
 
-    public String readParameter(String parameterName) {
+    public static String readParameter(String parameterName) {
         GetParameterRequest parameterRequest = new GetParameterRequest()
                 .withName(parameterName);
 

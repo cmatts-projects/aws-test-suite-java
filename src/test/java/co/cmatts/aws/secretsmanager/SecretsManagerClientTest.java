@@ -10,6 +10,7 @@ import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
+import static co.cmatts.aws.secretsmanager.SecretsManagerClient.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SECRETSMANAGER;
 
@@ -28,8 +29,6 @@ class SecretsManagerClientTest {
     private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer(IMAGE)
             .withServices(SECRETSMANAGER);
 
-    private static SecretsManagerClient secretsManagerClient;
-
     @BeforeAll
     static void beforeAll() {
         environmentVariables
@@ -37,28 +36,26 @@ class SecretsManagerClientTest {
                 .set("AWS_SECRET_ACCESS_KEY", LOCAL_STACK_CONTAINER.getSecretKey())
                 .set("LOCAL_STACK_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(null).toString())
                 .set("AWS_REGION", LOCAL_STACK_CONTAINER.getRegion());
-
-        secretsManagerClient = new SecretsManagerClient();
     }
 
     @Test
     @Order(value = 1)
     void shouldCreateSecrets() {
-        assertThat(secretsManagerClient.createSecret(SECRET_NAME, SECRET_VALUE)).isNotBlank();
+        assertThat(createSecret(SECRET_NAME, SECRET_VALUE)).isNotBlank();
     }
 
     @Test
     @Order(value = 2)
     void shouldReadSecrets() {
-        assertThat(secretsManagerClient.readSecret(SECRET_NAME)).isEqualTo(SECRET_VALUE);
+        assertThat(readSecret(SECRET_NAME)).isEqualTo(SECRET_VALUE);
     }
 
     @Test
     @Order(value = 3)
     void shouldUpdateSecrets() {
         String secret = "{ \"mySecret\": \"mySecretValue\", \"myUpdateSecret\": \"myUpdatedSecretValue\"}";
-        secretsManagerClient.updateSecret(SECRET_NAME, secret);
+        updateSecret(SECRET_NAME, secret);
 
-        assertThat(secretsManagerClient.readSecret(SECRET_NAME)).isEqualTo(secret);
+        assertThat(readSecret(SECRET_NAME)).isEqualTo(secret);
     }
 }

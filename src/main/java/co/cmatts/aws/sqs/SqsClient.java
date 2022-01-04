@@ -1,6 +1,5 @@
 package co.cmatts.aws.sqs;
 
-import co.cmatts.aws.s3.S3Client;
 import com.amazon.sqs.javamessaging.AmazonSQSExtendedClient;
 import com.amazon.sqs.javamessaging.ExtendedClientConfiguration;
 import com.amazonaws.client.builder.AwsClientBuilder;
@@ -14,6 +13,7 @@ import software.amazon.payloadoffloading.S3Dao;
 
 import java.util.List;
 
+import static co.cmatts.aws.s3.S3Client.getS3Client;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 
@@ -61,9 +61,8 @@ public class SqsClient {
             return extendedClient;
         }
 
-        S3Client s3 = new S3Client();
         ExtendedClientConfiguration extendedClientConfig = new ExtendedClientConfiguration()
-                        .withPayloadSupportEnabled(s3.getS3Client(), extendedClientBucket);
+                        .withPayloadSupportEnabled(getS3Client(), extendedClientBucket);
 
         extendedClient = new AmazonSQSExtendedClient(getSqsClient(), extendedClientConfig);;
         return extendedClient;
@@ -73,8 +72,7 @@ public class SqsClient {
         if (payloadStore != null) {
             return payloadStore;
         }
-        S3Client s3 = new S3Client();
-        S3Dao s3Dao = new S3Dao(s3.getS3Client());
+        S3Dao s3Dao = new S3Dao(getS3Client());
         payloadStore = new S3BackedPayloadStore(s3Dao, extendedClientBucket);
 
         return payloadStore;

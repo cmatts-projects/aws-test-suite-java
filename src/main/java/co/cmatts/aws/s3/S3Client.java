@@ -12,9 +12,9 @@ import java.net.URISyntaxException;
 
 public class S3Client {
 
-    private AmazonS3 client;
+    private static AmazonS3 client;
 
-    public AmazonS3 getS3Client() {
+    public static AmazonS3 getS3Client() {
         if (client != null) {
             return client;
         }
@@ -32,15 +32,19 @@ public class S3Client {
         return client;
     }
 
-    public boolean bucketExists(String bucket) {
+    public static void resetS3Client() {
+        client = null;
+    }
+
+    public static boolean bucketExists(String bucket) {
         return getS3Client().doesBucketExistV2(bucket);
     }
 
-    public void createBucket(String bucket) {
+    public static void createBucket(String bucket) {
         getS3Client().createBucket(bucket);
     }
 
-    public void writeToBucket(String s3Url, File file) throws IllegalArgumentException {
+    public static void writeToBucket(String s3Url, File file) throws IllegalArgumentException {
         try {
             URI uri = new URI(s3Url);
             assert uri.getScheme().equalsIgnoreCase("s3");
@@ -51,7 +55,7 @@ public class S3Client {
         }
     }
 
-    public void writeToBucket(String s3Url, String content) throws IllegalArgumentException {
+    public static void writeToBucket(String s3Url, String content) throws IllegalArgumentException {
         try {
             URI uri = new URI(s3Url);
             assert uri.getScheme().equalsIgnoreCase("s3");
@@ -62,7 +66,7 @@ public class S3Client {
         }
     }
 
-    public boolean fileExists(String s3Url) {
+    public static boolean fileExists(String s3Url) {
         try {
             URI uri = new URI(s3Url);
             assert uri.getScheme().equalsIgnoreCase("s3");
@@ -72,7 +76,7 @@ public class S3Client {
         }
     }
 
-    public InputStream readFromBucket(String s3Url) {
+    public static InputStream readFromBucket(String s3Url) {
         try {
             URI uri = new URI(s3Url);
             assert uri.getScheme().equalsIgnoreCase("s3");

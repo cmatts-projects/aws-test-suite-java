@@ -10,9 +10,9 @@ import com.amazonaws.services.secretsmanager.model.PutSecretValueRequest;
 
 public class SecretsManagerClient {
 
-    private AWSSecretsManager client;
+    private static AWSSecretsManager client;
 
-    private AWSSecretsManager getSecretsManagerClient() {
+    private static AWSSecretsManager getSecretsManagerClient() {
         if (client != null) {
             return client;
         }
@@ -30,7 +30,7 @@ public class SecretsManagerClient {
         return client;
     }
 
-    public String createSecret(String secretName, String secretValue) {
+    public static String createSecret(String secretName, String secretValue) {
         CreateSecretRequest secretRequest = new CreateSecretRequest()
                 .withName(secretName)
                 .withSecretString(secretValue);
@@ -39,7 +39,7 @@ public class SecretsManagerClient {
         return result.getARN();
     }
 
-    public void updateSecret(String secretName, String secretValue) {
+    public static void updateSecret(String secretName, String secretValue) {
         PutSecretValueRequest secretValueRequest = new PutSecretValueRequest()
                 .withSecretId(secretName)
                 .withSecretString(secretValue);
@@ -47,7 +47,7 @@ public class SecretsManagerClient {
         getSecretsManagerClient().putSecretValue(secretValueRequest);
     }
 
-    public String readSecret(String secretName) {
+    public static String readSecret(String secretName) {
         GetSecretValueRequest secretValueRequest = new GetSecretValueRequest()
                 .withSecretId(secretName);
 
