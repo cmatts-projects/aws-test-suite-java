@@ -16,7 +16,7 @@ public class ParameterStoreClient {
         }
 
         AWSSimpleSystemsManagementClientBuilder builder = AWSSimpleSystemsManagementClientBuilder.standard();
-        String localParameterStoreEndpoint = System.getenv("LOCAL_PARAMETER_STORE_ENDPOINT");
+        String localParameterStoreEndpoint = System.getenv("LOCAL_STACK_ENDPOINT");
         String awsRegion = System.getenv("AWS_REGION");
 
         if (localParameterStoreEndpoint != null && awsRegion != null) {

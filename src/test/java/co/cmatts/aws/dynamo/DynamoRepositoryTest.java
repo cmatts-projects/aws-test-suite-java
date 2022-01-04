@@ -1,10 +1,10 @@
 package co.cmatts.aws.dynamo;
 
 import co.cmatts.aws.cloudformation.CloudFormationClientFactory;
-import com.amazonaws.services.dynamodbv2.model.TransactionCanceledException;
 import co.cmatts.aws.dynamo.model.Fact;
 import co.cmatts.aws.dynamo.model.Person;
 import co.cmatts.aws.dynamo.model.Siblings;
+import com.amazonaws.services.dynamodbv2.model.TransactionCanceledException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,7 +49,7 @@ class DynamoRepositoryTest {
         environmentVariables
             .set("AWS_ACCESS_KEY", LOCAL_STACK_CONTAINER.getAccessKey())
             .set("AWS_SECRET_ACCESS_KEY", LOCAL_STACK_CONTAINER.getSecretKey())
-            .set("LOCAL_DYNAMODB_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(DYNAMODB).toString())
+            .set("LOCAL_STACK_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(null).toString())
             .set("AWS_REGION", LOCAL_STACK_CONTAINER.getRegion());
 
         cfClientFactory.createCloudformationClient().createStack(createDynamoDbStackRequest());

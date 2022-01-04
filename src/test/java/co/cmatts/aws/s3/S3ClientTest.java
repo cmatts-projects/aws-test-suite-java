@@ -1,6 +1,7 @@
 package co.cmatts.aws.s3;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -39,7 +40,7 @@ class S3ClientTest {
         environmentVariables
                 .set("AWS_ACCESS_KEY", LOCAL_STACK_CONTAINER.getAccessKey())
                 .set("AWS_SECRET_ACCESS_KEY", LOCAL_STACK_CONTAINER.getSecretKey())
-                .set("LOCAL_S3_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(S3).toString())
+                .set("LOCAL_STACK_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(null).toString())
                 .set("AWS_REGION", LOCAL_STACK_CONTAINER.getRegion());
 
         s3Client = new S3Client();

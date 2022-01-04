@@ -30,7 +30,7 @@ public class CloudWatchClient {
         }
 
         AmazonCloudWatchClientBuilder builder = AmazonCloudWatchClientBuilder.standard();
-        String localCloudWatchEndpoint = System.getenv("LOCAL_CLOUDWATCH_ENDPOINT");
+        String localCloudWatchEndpoint = System.getenv("LOCAL_STACK_ENDPOINT");
         String awsRegion = System.getenv("AWS_REGION");
 
         if (localCloudWatchEndpoint != null && awsRegion != null) {

@@ -45,7 +45,7 @@ public class KinesisClient {
         }
 
         AmazonKinesisClientBuilder builder = AmazonKinesisClientBuilder.standard();
-        String localKinesisEndpoint = System.getenv("LOCAL_KINESIS_ENDPOINT");
+        String localKinesisEndpoint = System.getenv("LOCAL_STACK_ENDPOINT");
         String awsRegion = System.getenv("AWS_REGION");
 
         if (localKinesisEndpoint != null && awsRegion != null) {
@@ -95,7 +95,7 @@ public class KinesisClient {
         }
 
         KinesisProducerConfiguration config = new KinesisProducerConfiguration();
-        String localKinesisEndpoint = System.getenv("LOCAL_KINESIS_ENDPOINT");
+        String localKinesisEndpoint = System.getenv("LOCAL_STACK_ENDPOINT");
         String awsRegion = System.getenv("AWS_REGION");
 
         if (localKinesisEndpoint != null && awsRegion != null) {

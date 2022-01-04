@@ -20,7 +20,7 @@ public class S3Client {
         }
 
         AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard();
-        String localS3Endpoint = System.getenv("LOCAL_S3_ENDPOINT");
+        String localS3Endpoint = System.getenv("LOCAL_STACK_ENDPOINT");
         String awsRegion = System.getenv("AWS_REGION");
 
         if (localS3Endpoint != null && awsRegion != null) {

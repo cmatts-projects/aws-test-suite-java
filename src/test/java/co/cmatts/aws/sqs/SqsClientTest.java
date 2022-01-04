@@ -1,5 +1,6 @@
 package co.cmatts.aws.sqs;
 
+import co.cmatts.aws.s3.S3Client;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,7 +10,6 @@ import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
-import co.cmatts.aws.s3.S3Client;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
@@ -47,8 +47,7 @@ class SqsClientTest {
         environmentVariables
                 .set("AWS_ACCESS_KEY", LOCAL_STACK_CONTAINER.getAccessKey())
                 .set("AWS_SECRET_ACCESS_KEY", LOCAL_STACK_CONTAINER.getSecretKey())
-                .set("LOCAL_S3_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(S3).toString())
-                .set("LOCAL_SQS_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(SQS).toString())
+                .set("LOCAL_STACK_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(null).toString())
                 .set("AWS_REGION", LOCAL_STACK_CONTAINER.getRegion());
 
         S3Client s3Client = new S3Client();

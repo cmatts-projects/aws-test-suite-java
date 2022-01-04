@@ -1,5 +1,6 @@
 package co.cmatts.aws.lambda;
 
+import co.cmatts.aws.sqs.SqsClient;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
 import org.junit.jupiter.api.BeforeAll;
@@ -9,7 +10,6 @@ import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
-import co.cmatts.aws.sqs.SqsClient;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Duration.FIVE_SECONDS;
 import static org.awaitility.Duration.ONE_HUNDRED_MILLISECONDS;
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SQS;
 
 @Testcontainers
@@ -46,8 +45,7 @@ class SqsEventHandlerTest {
         environmentVariables
                 .set("AWS_ACCESS_KEY", LOCAL_STACK_CONTAINER.getAccessKey())
                 .set("AWS_SECRET_ACCESS_KEY", LOCAL_STACK_CONTAINER.getSecretKey())
-                .set("LOCAL_S3_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(S3).toString())
-                .set("LOCAL_SQS_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(SQS).toString())
+                .set("LOCAL_STACK_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(null).toString())
                 .set("FORWARD_QUEUE", TEST_QUEUE)
                 .set("AWS_REGION", LOCAL_STACK_CONTAINER.getRegion());
 

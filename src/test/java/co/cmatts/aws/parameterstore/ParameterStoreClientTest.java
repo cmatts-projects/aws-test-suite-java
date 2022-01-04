@@ -35,7 +35,7 @@ class ParameterStoreClientTest {
         environmentVariables
                 .set("AWS_ACCESS_KEY", LOCAL_STACK_CONTAINER.getAccessKey())
                 .set("AWS_SECRET_ACCESS_KEY", LOCAL_STACK_CONTAINER.getSecretKey())
-                .set("LOCAL_PARAMETER_STORE_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(SSM).toString())
+                .set("LOCAL_STACK_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(null).toString())
                 .set("AWS_REGION", LOCAL_STACK_CONTAINER.getRegion());
 
         parameterStoreClient = new ParameterStoreClient();

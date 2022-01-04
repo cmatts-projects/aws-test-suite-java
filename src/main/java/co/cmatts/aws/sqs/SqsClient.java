@@ -1,5 +1,6 @@
 package co.cmatts.aws.sqs;
 
+import co.cmatts.aws.s3.S3Client;
 import com.amazon.sqs.javamessaging.AmazonSQSExtendedClient;
 import com.amazon.sqs.javamessaging.ExtendedClientConfiguration;
 import com.amazonaws.client.builder.AwsClientBuilder;
@@ -8,7 +9,6 @@ import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.PurgeQueueRequest;
 import com.amazonaws.services.sqs.model.SendMessageBatchRequestEntry;
-import co.cmatts.aws.s3.S3Client;
 import software.amazon.payloadoffloading.S3BackedPayloadStore;
 import software.amazon.payloadoffloading.S3Dao;
 
@@ -40,7 +40,7 @@ public class SqsClient {
         }
 
         AmazonSQSClientBuilder builder = AmazonSQSClientBuilder.standard();
-        String localSqsEndpoint = System.getenv("LOCAL_SQS_ENDPOINT");
+        String localSqsEndpoint = System.getenv("LOCAL_STACK_ENDPOINT");
         String awsRegion = System.getenv("AWS_REGION");
 
         if (localSqsEndpoint != null && awsRegion != null) {

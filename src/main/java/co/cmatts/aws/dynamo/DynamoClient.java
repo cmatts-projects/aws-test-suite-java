@@ -18,7 +18,7 @@ public class DynamoClient {
         }
 
         AmazonDynamoDBClientBuilder builder = AmazonDynamoDBClientBuilder.standard();
-        String localDynamoDbEndpoint = System.getenv("LOCAL_DYNAMODB_ENDPOINT");
+        String localDynamoDbEndpoint = System.getenv("LOCAL_STACK_ENDPOINT");
         String awsRegion = System.getenv("AWS_REGION");
 
         if (localDynamoDbEndpoint != null && awsRegion != null) {

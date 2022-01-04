@@ -35,7 +35,7 @@ class SecretsManagerClientTest {
         environmentVariables
                 .set("AWS_ACCESS_KEY", LOCAL_STACK_CONTAINER.getAccessKey())
                 .set("AWS_SECRET_ACCESS_KEY", LOCAL_STACK_CONTAINER.getSecretKey())
-                .set("LOCAL_SECRETS_MANAGER_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(SECRETSMANAGER).toString())
+                .set("LOCAL_STACK_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(null).toString())
                 .set("AWS_REGION", LOCAL_STACK_CONTAINER.getRegion());
 
         secretsManagerClient = new SecretsManagerClient();

@@ -6,8 +6,6 @@ import com.amazonaws.services.cloudformation.AmazonCloudFormation;
 import com.amazonaws.services.cloudformation.AmazonCloudFormationClientBuilder;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.CLOUDFORMATION;
-
 public class CloudFormationClientFactory {
     private final LocalStackContainer localStackContainer;
 
@@ -16,7 +14,7 @@ public class CloudFormationClientFactory {
     }
 
     public AmazonCloudFormation createCloudformationClient() {
-        String cfEndpoint = localStackContainer.getEndpointOverride(CLOUDFORMATION).toString();
+        String cfEndpoint = localStackContainer.getEndpointOverride(null).toString();
 
         return AmazonCloudFormationClientBuilder.standard()
                 .withClientConfiguration(PredefinedClientConfigurations.defaultConfig())

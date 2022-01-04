@@ -18,7 +18,7 @@ public class SecretsManagerClient {
         }
 
         AWSSecretsManagerClientBuilder builder = AWSSecretsManagerClientBuilder.standard();
-        String localSecretsManagerEndpoint = System.getenv("LOCAL_SECRETS_MANAGER_ENDPOINT");
+        String localSecretsManagerEndpoint = System.getenv("LOCAL_STACK_ENDPOINT");
         String awsRegion = System.getenv("AWS_REGION");
 
         if (localSecretsManagerEndpoint != null && awsRegion != null) {
