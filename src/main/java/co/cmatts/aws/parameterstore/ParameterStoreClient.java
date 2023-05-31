@@ -1,6 +1,5 @@
 package co.cmatts.aws.parameterstore;
 
-import co.cmatts.aws.client.Configuration;
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement;
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagementClientBuilder;
 import com.amazonaws.services.simplesystemsmanagement.model.GetParameterRequest;

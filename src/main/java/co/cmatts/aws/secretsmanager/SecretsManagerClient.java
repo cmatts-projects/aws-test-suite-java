@@ -1,6 +1,5 @@
 package co.cmatts.aws.secretsmanager;
 
-import co.cmatts.aws.client.Configuration;
 import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
 import com.amazonaws.services.secretsmanager.model.CreateSecretRequest;

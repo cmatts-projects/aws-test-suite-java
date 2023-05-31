@@ -1,6 +1,5 @@
 package co.cmatts.aws.s3;
 
-import co.cmatts.aws.client.Configuration;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.servicequotas.model.IllegalArgumentException;

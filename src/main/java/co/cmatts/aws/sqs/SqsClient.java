@@ -1,6 +1,5 @@
 package co.cmatts.aws.sqs;
 
-import co.cmatts.aws.client.Configuration;
 import com.amazon.sqs.javamessaging.AmazonSQSExtendedClient;
 import com.amazon.sqs.javamessaging.ExtendedClientConfiguration;
 import com.amazonaws.services.sqs.AmazonSQS;

@@ -1,6 +1,5 @@
 package co.cmatts.aws.cloudformation;
 
-import co.cmatts.aws.client.Configuration;
 import com.amazonaws.services.cloudformation.AmazonCloudFormation;
 import com.amazonaws.services.cloudformation.AmazonCloudFormationClientBuilder;
 import com.amazonaws.services.cloudformation.model.CreateStackRequest;

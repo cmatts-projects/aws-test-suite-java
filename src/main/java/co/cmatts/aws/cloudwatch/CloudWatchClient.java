@@ -1,6 +1,5 @@
 package co.cmatts.aws.cloudwatch;
 
-import co.cmatts.aws.client.Configuration;
 import com.amazonaws.services.cloudwatch.AmazonCloudWatch;
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchClientBuilder;
 import com.amazonaws.services.cloudwatch.model.*;

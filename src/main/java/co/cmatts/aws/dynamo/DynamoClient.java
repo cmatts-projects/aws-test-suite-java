@@ -1,6 +1,5 @@
 package co.cmatts.aws.dynamo;
 
-import co.cmatts.aws.client.Configuration;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;

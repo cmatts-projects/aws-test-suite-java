@@ -1,6 +1,5 @@
 package co.cmatts.aws.kinesis;
 
-import co.cmatts.aws.client.Configuration;
 import com.amazonaws.services.kinesis.AmazonKinesis;
 import com.amazonaws.services.kinesis.AmazonKinesisClientBuilder;
 import com.amazonaws.services.kinesis.model.Record;
