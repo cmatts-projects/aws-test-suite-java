@@ -1,6 +1,6 @@
 package co.cmatts.aws.v2.dynamo;
 
-import co.cmatts.aws.v2.cloudformation.CloudFormationClient;
+import co.cmatts.aws.v2.cloudformation.CloudFormation;
 import co.cmatts.aws.v2.dynamo.model.Fact;
 import co.cmatts.aws.v2.dynamo.model.Person;
 import co.cmatts.aws.v2.dynamo.model.Siblings;
@@ -59,7 +59,7 @@ class DynamoRepositoryTest {
         systemProperties
                 .set("software.amazon.awssdk.http.service.impl", "software.amazon.awssdk.http.urlconnection.UrlConnectionSdkHttpService");
 
-        CloudFormationClient.createStack("DynamoDB", DYNAMO_TABLES_YML);
+        CloudFormation.createStack("DynamoDB", DYNAMO_TABLES_YML);
 
         repo = new DynamoRepository();
         repo.load(peopleDataList(), factDataList());

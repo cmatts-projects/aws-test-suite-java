@@ -58,6 +58,11 @@
             <artifactId>dynamodb-enhanced</artifactId>
             <version>${aws.version2}</version>
         </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>cloudformation</artifactId>
+            <version>${aws.version2}</version>
+        </dependency>
 
         <!-- Project lombok -->
         <dependency>
