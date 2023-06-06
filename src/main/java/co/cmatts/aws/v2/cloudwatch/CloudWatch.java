@@ -1,6 +1,7 @@
 package co.cmatts.aws.v2.cloudwatch;
 
 import org.apache.commons.collections4.ListUtils;
+import software.amazon.awssdk.services.cloudwatch.CloudWatchClient;
 import software.amazon.awssdk.services.cloudwatch.CloudWatchClientBuilder;
 import software.amazon.awssdk.services.cloudwatch.model.*;
 
@@ -14,16 +15,16 @@ import java.util.concurrent.TimeUnit;
 import static co.cmatts.aws.v2.client.Configuration.configureEndPoint;
 import static java.time.ZoneOffset.UTC;
 
-public class CloudWatchClient {
+public class CloudWatch {
 
-    private static software.amazon.awssdk.services.cloudwatch.CloudWatchClient client;
+    private static CloudWatchClient client;
 
-    private static software.amazon.awssdk.services.cloudwatch.CloudWatchClient getCloudWatchClient() {
+    private static CloudWatchClient getCloudWatchClient() {
         if (client != null) {
             return client;
         }
 
-        CloudWatchClientBuilder builder = software.amazon.awssdk.services.cloudwatch.CloudWatchClient.builder();
+        CloudWatchClientBuilder builder = CloudWatchClient.builder();
         configureEndPoint(builder);
 
         client = builder.build();

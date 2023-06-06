@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static co.cmatts.aws.v2.cloudwatch.CloudWatchClient.*;
+import static co.cmatts.aws.v2.cloudwatch.CloudWatch.*;
 import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.CLOUDWATCH;
@@ -26,7 +26,7 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 @Testcontainers
 @ExtendWith(SystemStubsExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class CloudWatchClientTest {
+class CloudWatchTest {
     private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
     private static final int NUMBER_METRICS = 100;
     private static final String MY_DIMENSION = "myDimension";
