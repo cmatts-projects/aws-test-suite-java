@@ -4,7 +4,7 @@ import co.cmatts.aws.v2.dynamo.model.DynamoDbMappedBean;
 import co.cmatts.aws.v2.dynamo.model.Fact;
 import co.cmatts.aws.v2.dynamo.model.Person;
 import co.cmatts.aws.v2.dynamo.model.Siblings;
-import com.google.common.collect.Iterators;
+import org.apache.commons.collections4.ListUtils;
 import software.amazon.awssdk.core.async.SdkPublisher;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbAsyncIndex;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbAsyncTable;
@@ -123,8 +123,8 @@ public class DynamoRepository {
 
     @SafeVarargs
     public final void load(List<? extends DynamoDbMappedBean>... dataLists) {
-        Stream<DynamoDbMappedBean> allData = Stream.of(dataLists).flatMap(List::stream);
-        Iterators.partition(allData.iterator(), BATCH_SIZE).forEachRemaining(this::loadBatch);
+        List<DynamoDbMappedBean> allData = Stream.of(dataLists).flatMap(List::stream).collect(toList());
+        ListUtils.partition(allData, BATCH_SIZE).forEach(this::loadBatch);
     }
 
     private void loadBatch(List<DynamoDbMappedBean> data) {

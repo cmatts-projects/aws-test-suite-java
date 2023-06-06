@@ -63,6 +63,11 @@
             <artifactId>cloudformation</artifactId>
             <version>${aws.version2}</version>
         </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>cloudwatch</artifactId>
+            <version>${aws.version2}</version>
+        </dependency>
 
         <!-- Project lombok -->
         <dependency>
