@@ -54,7 +54,6 @@ class CloudWatchTest {
 
         systemProperties
                 .set("software.amazon.awssdk.http.service.impl", "software.amazon.awssdk.http.urlconnection.UrlConnectionSdkHttpService");
-
     }
 
     @Test
