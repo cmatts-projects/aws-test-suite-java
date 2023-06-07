@@ -49,7 +49,7 @@ class LargeSqsEventHandlerTest {
     static void beforeAll() {
         environmentVariables
                 .set("AWS_ACCESS_KEY", LOCAL_STACK_CONTAINER.getAccessKey())
-                .set("AWS_SECRET_ACCESS_KEY", LOCAL_STACK_CONTAINER.getSecretKey())
+                .set("AWS_SECRET_KEY", LOCAL_STACK_CONTAINER.getSecretKey())
                 .set("LOCAL_STACK_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(null).toString())
                 .set("FORWARD_QUEUE", TEST_QUEUE)
                 .set("EXTENDED_CLIENT_BUCKET", TEST_QUEUE_BUCKET)
