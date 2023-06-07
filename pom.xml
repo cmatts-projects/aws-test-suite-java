@@ -12,7 +12,8 @@
     <properties>
         <java.version>11</java.version>
         <aws.version1>1.12.20</aws.version1>
-        <aws.version2>2.16.1</aws.version2>
+        <aws.version2>2.20.79</aws.version2>
+        <aws.crt.version>0.22.1</aws.crt.version>
         <aws.kinesis.version>0.14.9</aws.kinesis.version>
         <junit.version>5.7.2</junit.version>
         <testcontainers.version>1.15.3</testcontainers.version>
@@ -81,6 +82,11 @@
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>kinesis</artifactId>
+            <version>${aws.version2}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
             <version>${aws.version2}</version>
         </dependency>
 
