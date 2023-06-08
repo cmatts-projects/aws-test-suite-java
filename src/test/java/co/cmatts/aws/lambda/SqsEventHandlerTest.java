@@ -1,6 +1,6 @@
 package co.cmatts.aws.lambda;
 
-import co.cmatts.aws.sqs.SqsClient;
+import co.cmatts.aws.v1.sqs.Sqs;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
 import org.junit.jupiter.api.BeforeAll;
@@ -38,19 +38,19 @@ class SqsEventHandlerTest {
     private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer(IMAGE)
             .withServices(SQS);
 
-    private static SqsClient sqsClient;
+    private static Sqs sqs;
 
     @BeforeAll
     static void beforeAll() {
         environmentVariables
                 .set("AWS_ACCESS_KEY", LOCAL_STACK_CONTAINER.getAccessKey())
-                .set("AWS_SECRET_ACCESS_KEY", LOCAL_STACK_CONTAINER.getSecretKey())
+                .set("AWS_SECRET_KEY", LOCAL_STACK_CONTAINER.getSecretKey())
                 .set("LOCAL_STACK_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(null).toString())
                 .set("FORWARD_QUEUE", TEST_QUEUE)
                 .set("AWS_REGION", LOCAL_STACK_CONTAINER.getRegion());
 
-        sqsClient = new SqsClient();
-        sqsClient.createQueue(TEST_QUEUE);
+        sqs = new Sqs();
+        sqs.createQueue(TEST_QUEUE);
     }
 
     @Test
@@ -88,7 +88,7 @@ class SqsEventHandlerTest {
                 .with()
                 .pollInterval(ONE_HUNDRED_MILLISECONDS)
                 .until(() -> {
-                    messages.addAll(sqsClient.readFromQueue(TEST_QUEUE));
+                    messages.addAll(sqs.readFromQueue(TEST_QUEUE));
                     return messages.size() >= numberOfRecords;
                 });
 

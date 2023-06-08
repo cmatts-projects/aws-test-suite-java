@@ -11,14 +11,16 @@
 
     <properties>
         <java.version>11</java.version>
-        <aws.version>1.12.20</aws.version>
+        <aws.version1>1.12.20</aws.version1>
+        <aws.version2>2.20.79</aws.version2>
+        <aws.crt.version>0.22.1</aws.crt.version>
         <aws.kinesis.version>0.14.9</aws.kinesis.version>
         <junit.version>5.7.2</junit.version>
         <testcontainers.version>1.15.3</testcontainers.version>
         <lombok.version>1.18.20</lombok.version>
         <retry4j.version>0.15.0</retry4j.version>
         <awaitility.version>3.0.0</awaitility.version>
-        <aws.sqs.extended.client.version>1.2.2</aws.sqs.extended.client.version>
+        <aws.sqs.extended.client.version>1.2.4</aws.sqs.extended.client.version>
         <aws.lambda.version>1.2.1</aws.lambda.version>
         <aws.lambda.events.version>3.10.0</aws.lambda.events.version>
     </properties>
@@ -28,7 +30,7 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk</artifactId>
-            <version>${aws.version}</version>
+            <version>${aws.version1}</version>
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
@@ -50,6 +52,47 @@
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-events</artifactId>
             <version>${aws.lambda.events.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>dynamodb-enhanced</artifactId>
+            <version>${aws.version2}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>cloudformation</artifactId>
+            <version>${aws.version2}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>cloudwatch</artifactId>
+            <version>${aws.version2}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>ssm</artifactId>
+            <version>${aws.version2}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>secretsmanager</artifactId>
+            <version>${aws.version2}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>kinesis</artifactId>
+            <version>${aws.version2}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+            <version>${aws.version2}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>sqs</artifactId>
+            <version>${aws.version2}</version>
         </dependency>
 
         <!-- Project lombok -->

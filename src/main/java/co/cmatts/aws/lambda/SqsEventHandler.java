@@ -4,11 +4,11 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
-import co.cmatts.aws.sqs.SqsClient;
+import co.cmatts.aws.v1.sqs.Sqs;
 
 public class SqsEventHandler implements RequestHandler<SQSEvent, Void> {
 
-    private SqsClient sqsClient = new SqsClient();
+    private Sqs sqs = new Sqs();
     private String queueName = System.getenv("FORWARD_QUEUE");
 
     @Override
@@ -20,7 +20,7 @@ public class SqsEventHandler implements RequestHandler<SQSEvent, Void> {
     }
 
     private void doSomething(SQSMessage sqsMessage) {
-        sqsClient.sendToQueue(queueName, sqsMessage.getBody());
+        sqs.sendToQueue(queueName, sqsMessage.getBody());
     }
 
 }
