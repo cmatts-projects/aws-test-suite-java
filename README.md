@@ -6,9 +6,9 @@ those services.
 
 For completeness this suite includes sample implementations of services for the AWS Java SDK V1 and SDK V2.
 
-_Note:_ There is a large overlap between the v1 and v2 samples and particularly the test cases resulting in a lot of
-duplication of code. This is intentional to help isolate the implementations and aid with the readability of the samples
-and the tests.
+_Note:_ There is a large overlap between the v1 and v2 test cases and to a lesser extent the sample implementations
+resulting in a lot of duplication of code. This is intentional to help isolate the implementations and aid with the
+readability of the samples and the tests.
 
 # Pre-requisites
 
