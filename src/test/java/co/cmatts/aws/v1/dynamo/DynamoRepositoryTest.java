@@ -1,6 +1,6 @@
 package co.cmatts.aws.v1.dynamo;
 
-import co.cmatts.aws.v1.cloudformation.CloudFormationClient;
+import co.cmatts.aws.v1.cloudformation.CloudFormation;
 import co.cmatts.aws.v1.dynamo.model.Fact;
 import co.cmatts.aws.v1.dynamo.model.Person;
 import co.cmatts.aws.v1.dynamo.model.Siblings;
@@ -50,7 +50,7 @@ class DynamoRepositoryTest {
             .set("LOCAL_STACK_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(null).toString())
             .set("AWS_REGION", LOCAL_STACK_CONTAINER.getRegion());
 
-        CloudFormationClient.createStack("DynamoDB", DYNAMO_TABLES_YML);
+        CloudFormation.createStack("DynamoDB", DYNAMO_TABLES_YML);
 
         repo = new DynamoRepository();
         repo.load(peopleDataList(), factDataList());

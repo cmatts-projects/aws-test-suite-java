@@ -1,4 +1,4 @@
-package co.cmatts.aws.v1.lambda;
+package co.cmatts.aws.lambda;
 
 import org.junit.jupiter.api.Test;
 

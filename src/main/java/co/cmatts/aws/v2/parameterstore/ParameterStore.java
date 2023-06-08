@@ -7,7 +7,7 @@ import software.amazon.awssdk.services.ssm.model.PutParameterRequest;
 
 import static co.cmatts.aws.v2.client.Configuration.configureEndPoint;
 
-public class ParameterStoreClient {
+public class ParameterStore {
 
     private static SsmClient client;
 

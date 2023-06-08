@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import static co.cmatts.aws.v1.client.Configuration.configureEndPoint;
 
-public class CloudFormationClient {
+public class CloudFormation {
 
     private static AmazonCloudFormation client;
 
@@ -29,7 +29,7 @@ public class CloudFormationClient {
     }
 
     private static CreateStackRequest createStackRequest(String stackName, String template) throws IOException {
-        String contents = new String(CloudFormationClient.class.getClassLoader()
+        String contents = new String(CloudFormation.class.getClassLoader()
                 .getResourceAsStream(template).readAllBytes());
 
         return new CreateStackRequest()

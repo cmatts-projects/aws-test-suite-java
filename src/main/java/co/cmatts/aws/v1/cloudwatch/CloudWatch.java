@@ -16,7 +16,7 @@ import static co.cmatts.aws.v1.client.Configuration.configureEndPoint;
 import static com.amazonaws.services.cloudwatch.model.Statistic.Average;
 import static java.time.ZoneOffset.UTC;
 
-public class CloudWatchClient {
+public class CloudWatch {
 
     private static AmazonCloudWatch client;
 

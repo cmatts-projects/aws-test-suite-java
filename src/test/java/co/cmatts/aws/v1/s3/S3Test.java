@@ -15,14 +15,14 @@ import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Paths;
 
-import static co.cmatts.aws.v1.s3.S3Client.*;
+import static co.cmatts.aws.v1.s3.S3.*;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
 
 @Testcontainers
 @ExtendWith(SystemStubsExtension.class)
-class S3ClientTest {
+class S3Test {
     private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
     private static final String TEST_BUCKET = "mybucket";
     private static final String TEST_CONTENT = "{ \"content\": \"some content\" }";

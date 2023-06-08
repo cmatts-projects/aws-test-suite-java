@@ -1,4 +1,4 @@
-package co.cmatts.aws.v1.lambda;
+package co.cmatts.aws.lambda;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;

@@ -7,7 +7,7 @@ import com.amazonaws.services.simplesystemsmanagement.model.PutParameterRequest;
 
 import static co.cmatts.aws.v1.client.Configuration.configureEndPoint;
 
-public class ParameterStoreClient {
+public class ParameterStore {
 
     private static AWSSimpleSystemsManagement client;
 

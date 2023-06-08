@@ -1,6 +1,6 @@
-package co.cmatts.aws.v1.lambda;
+package co.cmatts.aws.lambda;
 
-import co.cmatts.aws.v1.sqs.SqsClient;
+import co.cmatts.aws.v1.sqs.Sqs;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
 import org.apache.commons.lang3.StringUtils;
@@ -18,8 +18,8 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static co.cmatts.aws.v1.s3.S3Client.createBucket;
-import static co.cmatts.aws.v1.s3.S3Client.resetS3Client;
+import static co.cmatts.aws.v1.s3.S3.createBucket;
+import static co.cmatts.aws.v1.s3.S3.resetS3Client;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
@@ -43,7 +43,7 @@ class LargeSqsEventHandlerTest {
     private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer(IMAGE)
             .withServices(SQS, S3);
 
-    private static SqsClient sqsClient;
+    private static Sqs sqs;
 
     @BeforeAll
     static void beforeAll() {
@@ -57,8 +57,8 @@ class LargeSqsEventHandlerTest {
 
         resetS3Client();
         createBucket(TEST_QUEUE_BUCKET);
-        sqsClient = new SqsClient(TEST_QUEUE_BUCKET);
-        sqsClient.createQueue(TEST_QUEUE);
+        sqs = new Sqs(TEST_QUEUE_BUCKET);
+        sqs.createQueue(TEST_QUEUE);
     }
 
     @Test
@@ -85,7 +85,7 @@ class LargeSqsEventHandlerTest {
         String messageId = randomUUID().toString();
         SQSMessage sqsMessage = new SQSMessage();
         sqsMessage.setMessageId(messageId);
-        sqsMessage.setBody(sqsClient.storeOriginalMessage(TEST_MESSAGE));
+        sqsMessage.setBody(sqs.storeOriginalMessage(TEST_MESSAGE));
         return sqsMessage;
     }
 
@@ -97,7 +97,7 @@ class LargeSqsEventHandlerTest {
                 .with()
                 .pollInterval(ONE_HUNDRED_MILLISECONDS)
                 .until(() -> {
-                    messages.addAll(sqsClient.readFromExtendedQueue(TEST_QUEUE));
+                    messages.addAll(sqs.readFromExtendedQueue(TEST_QUEUE));
                     return messages.size() >= numberOfRecords;
                 });
 

@@ -27,7 +27,7 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 
 @Testcontainers
 @ExtendWith(SystemStubsExtension.class)
-class KinesisClientTest {
+class KinesisTest {
     private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
     private static final String MY_STREAM = "myStream";
     private static final String A_MESSAGE = "A message";
@@ -43,7 +43,7 @@ class KinesisClientTest {
     private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer(IMAGE)
             .withServices(KINESIS);
 
-    private static KinesisClient kinesisClient;
+    private static Kinesis kinesis;
 
     @BeforeAll
     static void beforeAll() {
@@ -55,21 +55,21 @@ class KinesisClientTest {
 
         systemProperties
                 .set(SDKGlobalConfiguration.AWS_CBOR_DISABLE_SYSTEM_PROPERTY, "true");
-        kinesisClient = new KinesisClient();
-        kinesisClient.createStream(MY_STREAM, 1);
+        kinesis = new Kinesis();
+        kinesis.createStream(MY_STREAM, 1);
     }
 
     @Test
     void shouldBeActiveKinesisStream() {
-        assertThat(kinesisClient.getStreamStatus()).isEqualTo("ACTIVE");
+        assertThat(kinesis.getStreamStatus()).isEqualTo("ACTIVE");
     }
 
     @Test
     void shouldSendAndRetrieveMessageWithStream() {
-        kinesisClient.startKinesisListener();
-        kinesisClient.sendToKinesis(List.of(A_MESSAGE, ANOTHER_MESSAGE));
+        kinesis.startKinesisListener();
+        kinesis.sendToKinesis(List.of(A_MESSAGE, ANOTHER_MESSAGE));
         List<Record> records = retrieveRecordsFromKinesis(2);
-        kinesisClient.stopKinesisListener();
+        kinesis.stopKinesisListener();
 
         List<String> receivedMessages = records.stream()
                 .map(r -> UTF_8.decode(r.getData()).toString()).collect(toList());
@@ -77,7 +77,7 @@ class KinesisClientTest {
         assertThat(receivedMessages)
                 .containsExactlyInAnyOrder(A_MESSAGE, ANOTHER_MESSAGE);
 
-        List<Record> moreRecords = kinesisClient.getReceivedRecords();
+        List<Record> moreRecords = kinesis.getReceivedRecords();
         assertThat(moreRecords).hasSize(0);
     }
 
@@ -89,7 +89,7 @@ class KinesisClientTest {
                 .with()
                 .pollInterval(ONE_HUNDRED_MILLISECONDS)
                 .until(() -> {
-                    records.addAll(kinesisClient.getReceivedRecords());
+                    records.addAll(kinesis.getReceivedRecords());
                     return records.size() >= numberOfRecords;
                 });
 

@@ -12,14 +12,14 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import uk.org.webcompere.systemstubs.properties.SystemProperties;
 
-import static co.cmatts.aws.v2.parameterstore.ParameterStoreClient.readParameter;
-import static co.cmatts.aws.v2.parameterstore.ParameterStoreClient.writeParameter;
+import static co.cmatts.aws.v2.parameterstore.ParameterStore.readParameter;
+import static co.cmatts.aws.v2.parameterstore.ParameterStore.writeParameter;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SSM;
 
 @Testcontainers
 @ExtendWith(SystemStubsExtension.class)
-class ParameterStoreClientTest {
+class ParameterStoreTest {
     private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
     private static final String PARAMETER_NAME = "MY_PARAMETER";
     private static final String PARAMETER_VALUE = "A parameter value";

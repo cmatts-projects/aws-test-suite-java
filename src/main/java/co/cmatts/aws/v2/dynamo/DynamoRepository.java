@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static co.cmatts.aws.v2.dynamo.DynamoClient.*;
+import static co.cmatts.aws.v2.dynamo.Dynamo.*;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;

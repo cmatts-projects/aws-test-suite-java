@@ -7,7 +7,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 
 import static co.cmatts.aws.v1.client.Configuration.configureEndPoint;
 
-public class DynamoClient {
+public class Dynamo {
 
     public static final String TABLE_NAME_PREFIX = "dynamo.example.";
     private static AmazonDynamoDB client;

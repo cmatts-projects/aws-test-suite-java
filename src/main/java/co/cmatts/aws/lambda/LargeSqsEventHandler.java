@@ -1,14 +1,14 @@
-package co.cmatts.aws.v1.lambda;
+package co.cmatts.aws.lambda;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
-import co.cmatts.aws.v1.sqs.SqsClient;
+import co.cmatts.aws.v1.sqs.Sqs;
 
-public class SqsEventHandler implements RequestHandler<SQSEvent, Void> {
+public class LargeSqsEventHandler implements RequestHandler<SQSEvent, Void> {
 
-    private SqsClient sqsClient = new SqsClient();
+    private Sqs sqs = new Sqs(System.getenv("EXTENDED_CLIENT_BUCKET"));
     private String queueName = System.getenv("FORWARD_QUEUE");
 
     @Override
@@ -20,7 +20,8 @@ public class SqsEventHandler implements RequestHandler<SQSEvent, Void> {
     }
 
     private void doSomething(SQSMessage sqsMessage) {
-        sqsClient.sendToQueue(queueName, sqsMessage.getBody());
+        String originalMessage = sqs.toOriginalMessage(sqsMessage.getBody());
+        sqs.sendToExtendedQueue(queueName, originalMessage);
+        sqs.deleteOriginalMessage(sqsMessage.getBody());
     }
-
 }

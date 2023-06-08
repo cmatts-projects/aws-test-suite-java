@@ -11,7 +11,7 @@ import java.net.URISyntaxException;
 
 import static co.cmatts.aws.v1.client.Configuration.configureEndPoint;
 
-public class S3Client {
+public class S3 {
 
     private static AmazonS3 client;
 

@@ -13,11 +13,11 @@ import software.amazon.payloadoffloading.S3Dao;
 import java.util.List;
 
 import static co.cmatts.aws.v1.client.Configuration.configureEndPoint;
-import static co.cmatts.aws.v1.s3.S3Client.getS3Client;
+import static co.cmatts.aws.v1.s3.S3.getS3Client;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 
-public class SqsClient {
+public class Sqs {
 
     private final String extendedClientBucket;
 
@@ -26,11 +26,11 @@ public class SqsClient {
     private AmazonSQS client;
     private AmazonSQS extendedClient;
 
-    public SqsClient() {
+    public Sqs() {
         extendedClientBucket = null;
     }
 
-    public SqsClient(String extendedClientBucket) {
+    public Sqs(String extendedClientBucket) {
         this.extendedClientBucket = extendedClientBucket;
     }
 

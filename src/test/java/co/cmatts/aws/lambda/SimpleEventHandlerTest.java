@@ -1,6 +1,6 @@
-package co.cmatts.aws.v1.lambda;
+package co.cmatts.aws.lambda;
 
-import co.cmatts.aws.v1.lambda.model.MyEvent;
+import co.cmatts.aws.lambda.model.MyEvent;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

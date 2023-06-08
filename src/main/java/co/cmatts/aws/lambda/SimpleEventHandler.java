@@ -1,8 +1,8 @@
-package co.cmatts.aws.v1.lambda;
+package co.cmatts.aws.lambda;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import co.cmatts.aws.v1.lambda.model.MyEvent;
+import co.cmatts.aws.lambda.model.MyEvent;
 
 public class SimpleEventHandler implements RequestHandler<MyEvent, String> {
 

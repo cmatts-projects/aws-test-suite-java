@@ -1,4 +1,4 @@
-package co.cmatts.aws.v1.lambda.model;
+package co.cmatts.aws.lambda.model;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

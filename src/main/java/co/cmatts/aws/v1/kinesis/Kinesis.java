@@ -28,7 +28,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.temporal.ChronoUnit.SECONDS;
 
 
-public class KinesisClient {
+public class Kinesis {
     private static final Pattern ENDPOINT_PATTERN = Pattern.compile("http://(.*?):(\\d+)");
     private static final String MY_KEY = "myKey";
 

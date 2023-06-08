@@ -10,14 +10,14 @@ import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
-import static co.cmatts.aws.v1.secretsmanager.SecretsManagerClient.*;
+import static co.cmatts.aws.v1.secretsmanager.SecretsManager.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SECRETSMANAGER;
 
 @Testcontainers
 @ExtendWith(SystemStubsExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class SecretsManagerClientTest {
+class SecretsManagerTest {
     private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
     private static final String SECRET_NAME = "MY_SECRET";
     private static final String SECRET_VALUE = "{ \"mySecret\": \"mySecretValue\" }";

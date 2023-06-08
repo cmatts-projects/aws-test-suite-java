@@ -13,8 +13,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static co.cmatts.aws.v1.dynamo.DynamoClient.getDynamoMapper;
-import static co.cmatts.aws.v1.dynamo.DynamoClient.getDynamoMapperConfig;
+import static co.cmatts.aws.v1.dynamo.Dynamo.getDynamoMapper;
+import static co.cmatts.aws.v1.dynamo.Dynamo.getDynamoMapperConfig;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -121,16 +121,16 @@ public class DynamoRepository {
     }
 
     public void load(List<Person> peopleDataList, List<Fact> factDataList) {
-        DynamoDBMapper mapper = DynamoClient.getDynamoMapper();
+        DynamoDBMapper mapper = Dynamo.getDynamoMapper();
         List<Object> allData = Stream.concat(peopleDataList.stream(), factDataList.stream())
                 .collect(toList());
-        mapper.batchWrite(allData, emptyList(), DynamoClient.getDynamoMapperConfig());
+        mapper.batchWrite(allData, emptyList(), Dynamo.getDynamoMapperConfig());
     }
 
     public void updateEntities(List<Object> entities) {
-        DynamoDBMapper mapper = DynamoClient.getDynamoMapper();
+        DynamoDBMapper mapper = Dynamo.getDynamoMapper();
         TransactionWriteRequest transactionWriteRequest = new TransactionWriteRequest();
         entities.forEach(transactionWriteRequest::addUpdate);
-        mapper.transactionWrite(transactionWriteRequest, DynamoClient.getDynamoMapperConfig());
+        mapper.transactionWrite(transactionWriteRequest, Dynamo.getDynamoMapperConfig());
     }
 }

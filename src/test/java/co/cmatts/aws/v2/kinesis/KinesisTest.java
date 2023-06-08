@@ -44,7 +44,7 @@ class KinesisTest {
     private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer(IMAGE)
             .withServices(KINESIS);
 
-    private static Kinesis kinesisClient;
+    private static Kinesis kinesis;
 
     @BeforeAll
     static void beforeAll() {
@@ -58,21 +58,21 @@ class KinesisTest {
                 .set(SdkSystemSetting.CBOR_ENABLED.property(), "false")
                 .set("software.amazon.awssdk.http.service.impl", "software.amazon.awssdk.http.urlconnection.UrlConnectionSdkHttpService");
 
-        kinesisClient = new Kinesis();
-        kinesisClient.createStream(MY_STREAM, 1);
+        kinesis = new Kinesis();
+        kinesis.createStream(MY_STREAM, 1);
     }
 
     @Test
     void shouldBeActiveKinesisStream() {
-        assertThat(kinesisClient.getStreamStatus()).isEqualTo(StreamStatus.ACTIVE);
+        assertThat(kinesis.getStreamStatus()).isEqualTo(StreamStatus.ACTIVE);
     }
 
     @Test
     void shouldSendAndRetrieveMessageWithStream() {
-        kinesisClient.startKinesisListener();
-        kinesisClient.sendToKinesis(List.of(A_MESSAGE, ANOTHER_MESSAGE));
+        kinesis.startKinesisListener();
+        kinesis.sendToKinesis(List.of(A_MESSAGE, ANOTHER_MESSAGE));
         List<Record> records = retrieveRecordsFromKinesis(2);
-        kinesisClient.stopKinesisListener();
+        kinesis.stopKinesisListener();
 
         List<String> receivedMessages = records.stream()
                 .map(r -> UTF_8.decode(r.data().asByteBuffer()).toString()).collect(toList());
@@ -80,7 +80,7 @@ class KinesisTest {
         assertThat(receivedMessages)
                 .containsExactlyInAnyOrder(A_MESSAGE, ANOTHER_MESSAGE);
 
-        List<Record> moreRecords = kinesisClient.getReceivedRecords();
+        List<Record> moreRecords = kinesis.getReceivedRecords();
         assertThat(moreRecords).hasSize(0);
     }
 
@@ -92,7 +92,7 @@ class KinesisTest {
                 .with()
                 .pollInterval(ONE_HUNDRED_MILLISECONDS)
                 .until(() -> {
-                    records.addAll(kinesisClient.getReceivedRecords());
+                    records.addAll(kinesis.getReceivedRecords());
                     return records.size() >= numberOfRecords;
                 });
 

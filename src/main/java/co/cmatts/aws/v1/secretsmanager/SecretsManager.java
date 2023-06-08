@@ -9,7 +9,7 @@ import com.amazonaws.services.secretsmanager.model.PutSecretValueRequest;
 
 import static co.cmatts.aws.v1.client.Configuration.configureEndPoint;
 
-public class SecretsManagerClient {
+public class SecretsManager {
 
     private static AWSSecretsManager client;
 

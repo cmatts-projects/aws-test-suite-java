@@ -16,8 +16,8 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static co.cmatts.aws.v1.s3.S3Client.createBucket;
-import static co.cmatts.aws.v1.s3.S3Client.resetS3Client;
+import static co.cmatts.aws.v1.s3.S3.createBucket;
+import static co.cmatts.aws.v1.s3.S3.resetS3Client;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Duration.FIVE_SECONDS;
@@ -27,7 +27,7 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 
 @Testcontainers
 @ExtendWith(SystemStubsExtension.class)
-class SqsClientTest {
+class SqsTest {
     private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
     private static final String TEST_QUEUE_BUCKET = "my-queue-bucket";
     private static final String TEST_QUEUE = "myQueue";
@@ -41,7 +41,7 @@ class SqsClientTest {
     private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer(IMAGE)
             .withServices(SQS, S3);
 
-    private static SqsClient sqsClient;
+    private static Sqs sqs;
 
     @BeforeAll
     static void beforeAll() {
@@ -53,29 +53,29 @@ class SqsClientTest {
 
         resetS3Client();
         createBucket(TEST_QUEUE_BUCKET);
-        sqsClient = new SqsClient(TEST_QUEUE_BUCKET);
-        sqsClient.createQueue(TEST_QUEUE);
+        sqs = new Sqs(TEST_QUEUE_BUCKET);
+        sqs.createQueue(TEST_QUEUE);
     }
 
     @BeforeEach
     void purgeQueue() {
-        sqsClient.purgeQueue(TEST_QUEUE);
+        sqs.purgeQueue(TEST_QUEUE);
     }
 
     @Test
     void shouldSendToQueue() {
-        sqsClient.sendToQueue(TEST_QUEUE, TEST_MESSAGE);
+        sqs.sendToQueue(TEST_QUEUE, TEST_MESSAGE);
 
-        List<String> receivedMessages = sqsClient.readFromQueue(TEST_QUEUE);
+        List<String> receivedMessages = sqs.readFromQueue(TEST_QUEUE);
         assertThat(receivedMessages).hasSize(1);
         assertThat(receivedMessages.get(0)).isEqualTo(TEST_MESSAGE);
     }
 
     @Test
     void shouldSendSimpleMessageToExtendedQueue() {
-        sqsClient.sendToExtendedQueue(TEST_QUEUE, TEST_MESSAGE);
+        sqs.sendToExtendedQueue(TEST_QUEUE, TEST_MESSAGE);
 
-        List<String> receivedMessages = sqsClient.readFromQueue(TEST_QUEUE);
+        List<String> receivedMessages = sqs.readFromQueue(TEST_QUEUE);
         assertThat(receivedMessages).hasSize(1);
         assertThat(receivedMessages.get(0)).isEqualTo(TEST_MESSAGE);
     }
@@ -83,9 +83,9 @@ class SqsClientTest {
     @Test
     void shouldSendLargeMessageToExtendedQueue() {
         String largeMessage = StringUtils.repeat("X", 257 * 1024);
-        sqsClient.sendToExtendedQueue(TEST_QUEUE, largeMessage);
+        sqs.sendToExtendedQueue(TEST_QUEUE, largeMessage);
 
-        List<String> receivedMessages = sqsClient.readFromQueue(TEST_QUEUE);
+        List<String> receivedMessages = sqs.readFromQueue(TEST_QUEUE);
         assertThat(receivedMessages).hasSize(1);
         assertThat(receivedMessages.get(0)).matches(EXTENDED_MESSAGE_PAYLOAD);
     }
@@ -93,9 +93,9 @@ class SqsClientTest {
     @Test
     void shouldReceiveLargeMessageFromExtendedQueue() {
         String largeMessage = StringUtils.repeat("X", 257 * 1024);
-        sqsClient.sendToExtendedQueue(TEST_QUEUE, largeMessage);
+        sqs.sendToExtendedQueue(TEST_QUEUE, largeMessage);
 
-        List<String> receivedMessages = sqsClient.readFromExtendedQueue(TEST_QUEUE);
+        List<String> receivedMessages = sqs.readFromExtendedQueue(TEST_QUEUE);
         assertThat(receivedMessages).hasSize(1);
         assertThat(receivedMessages.get(0)).matches(largeMessage);
     }
@@ -104,7 +104,7 @@ class SqsClientTest {
     void shouldSendBigMessageBatchToExtendedQueue() {
         String largeMessage = StringUtils.repeat("X", 250 * 1024);
         List<String> messageBatch = List.of(largeMessage, largeMessage, largeMessage);
-        sqsClient.sendToExtendedQueue(TEST_QUEUE, messageBatch);
+        sqs.sendToExtendedQueue(TEST_QUEUE, messageBatch);
 
         List<String> receivedMessages = retrieveMessagesFromSqs(3);
         assertThat(receivedMessages.get(0)).matches(largeMessage);
@@ -118,7 +118,7 @@ class SqsClientTest {
                 .with()
                 .pollInterval(ONE_HUNDRED_MILLISECONDS)
                 .until(() -> {
-                    messages.addAll(sqsClient.readFromQueue(TEST_QUEUE));
+                    messages.addAll(sqs.readFromQueue(TEST_QUEUE));
                     return messages.size() >= numberOfRecords;
                 });
 

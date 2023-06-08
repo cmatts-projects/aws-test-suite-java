@@ -13,7 +13,7 @@ import static co.cmatts.aws.v2.client.Configuration.configureEndPoint;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 
-public class DynamoClient {
+public class Dynamo {
 
     public static final String TABLE_NAME_PREFIX = "dynamo.example.";
     private static final Map<String, DynamoDbAsyncTable<?  extends DynamoDbMappedBean>> tables = new HashMap<>();
