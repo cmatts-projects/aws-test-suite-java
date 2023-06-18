@@ -11,7 +11,6 @@ import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.model.TransactionCanceledException;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
@@ -33,7 +32,7 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 @ExtendWith(SystemStubsExtension.class)
 class DynamoRepositoryTest {
 
-    private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
+    private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("2.1.0");
     private static final String DYNAMO_TABLES_YML = "dynamo-tables.yml";
 
     @SystemStub
@@ -54,7 +53,7 @@ class DynamoRepositoryTest {
             .set("AWS_ACCESS_KEY_ID", LOCAL_STACK_CONTAINER.getAccessKey())
             .set("AWS_SECRET_ACCESS_KEY", LOCAL_STACK_CONTAINER.getSecretKey())
             .set("LOCAL_STACK_ENDPOINT", LOCAL_STACK_CONTAINER.getEndpointOverride(null).toString())
-            .set("AWS_REGION", Region.AWS_GLOBAL.id());
+            .set("AWS_REGION", LOCAL_STACK_CONTAINER.getRegion());
 
         systemProperties
                 .set("software.amazon.awssdk.http.service.impl", "software.amazon.awssdk.http.urlconnection.UrlConnectionSdkHttpService");

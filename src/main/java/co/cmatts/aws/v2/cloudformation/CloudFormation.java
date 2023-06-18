@@ -3,6 +3,7 @@ package co.cmatts.aws.v2.cloudformation;
 import software.amazon.awssdk.services.cloudformation.CloudFormationClient;
 import software.amazon.awssdk.services.cloudformation.CloudFormationClientBuilder;
 import software.amazon.awssdk.services.cloudformation.model.CreateStackRequest;
+import software.amazon.awssdk.services.cloudformation.model.DescribeStacksRequest;
 
 import java.io.IOException;
 
@@ -26,6 +27,8 @@ public class CloudFormation {
 
     public static void createStack(String stackName, String template) throws IOException {
         getCloudformationClient().createStack(createStackRequest(stackName, template));
+        DescribeStacksRequest describeStacksRequest = DescribeStacksRequest.builder().stackName(stackName).build();
+        getCloudformationClient().waiter().waitUntilStackCreateComplete(describeStacksRequest);
     }
 
     private static CreateStackRequest createStackRequest(String stackName, String template) throws IOException {

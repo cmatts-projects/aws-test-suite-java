@@ -3,6 +3,7 @@ package co.cmatts.aws.v2.parameterstore;
 import software.amazon.awssdk.services.ssm.SsmClient;
 import software.amazon.awssdk.services.ssm.SsmClientBuilder;
 import software.amazon.awssdk.services.ssm.model.GetParameterRequest;
+import software.amazon.awssdk.services.ssm.model.ParameterType;
 import software.amazon.awssdk.services.ssm.model.PutParameterRequest;
 
 import static co.cmatts.aws.v2.client.Configuration.configureEndPoint;
@@ -27,6 +28,7 @@ public class ParameterStore {
         PutParameterRequest parameterRequest = PutParameterRequest.builder()
                 .name(parameterName)
                 .value(parameterValue)
+                .type(ParameterType.STRING)
                 .description(parameterDescription)
                 .build();
 

@@ -15,6 +15,8 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import uk.org.webcompere.systemstubs.properties.SystemProperties;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static co.cmatts.aws.v1.s3.S3.createBucket;
@@ -29,7 +31,7 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 @Testcontainers
 @ExtendWith(SystemStubsExtension.class)
 class SqsTest {
-    private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
+    private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("2.1.0");
     private static final String TEST_QUEUE_BUCKET = "my-queue-bucket";
     private static final String TEST_QUEUE = "myQueue";
     private static final String TEST_MESSAGE = "A test message";
@@ -108,13 +110,22 @@ class SqsTest {
     }
 
     @Test
-    void shouldSendBigMessageBatchToExtendedQueue() {
-        String largeMessage = StringUtils.repeat("X", 250 * 1024);
+    void shouldSplitMessageBatchWhenBatchExceedsMaxBytes() {
+        String largeMessage = StringUtils.repeat("X", 127 * 1024);
         List<String> messageBatch = List.of(largeMessage, largeMessage, largeMessage);
         sqs.sendToExtendedQueue(TEST_QUEUE, messageBatch);
 
         List<String> receivedMessages = retrieveMessagesFromSqs(3);
-        assertThat(receivedMessages.get(0)).matches(largeMessage);
+        receivedMessages.forEach(message -> assertThat(message).matches(largeMessage));
+    }
+
+    @Test
+    void shouldSplitMessageBatchWhenBatchExceedsMaxMessages() {
+        List<String> messageBatch = Collections.nCopies(26, TEST_MESSAGE);
+        sqs.sendToExtendedQueue(TEST_QUEUE, messageBatch);
+
+        List<String> receivedMessages = retrieveMessagesFromSqs(26);
+        receivedMessages.forEach(message -> assertThat(message).matches(TEST_MESSAGE));
     }
 
     private List<String> retrieveMessagesFromSqs(int numberOfRecords) {

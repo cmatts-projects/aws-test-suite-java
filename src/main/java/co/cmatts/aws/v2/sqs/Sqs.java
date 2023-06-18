@@ -9,6 +9,8 @@ import software.amazon.awssdk.services.sqs.SqsClientBuilder;
 import software.amazon.awssdk.services.sqs.model.*;
 
 import java.lang.UnsupportedOperationException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 import static co.cmatts.aws.v2.client.Configuration.configureEndPoint;
@@ -17,6 +19,8 @@ import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 
 public class Sqs {
+    private static final int MAX_MESSAGE_BYTES = 256000;
+    private static final int MAX_BATCH_SIZE = 10;
 
     private final String extendedClientBucket;
 
@@ -114,17 +118,38 @@ public class Sqs {
     }
 
     public void sendToExtendedQueue(String queueName, List<String> messages) {
-        List<SendMessageBatchRequestEntry> sendMessageBatchRequestEntries = messages.stream()
-                .map(m -> SendMessageBatchRequestEntry.builder()
-                        .id(randomUUID().toString())
-                        .messageBody(m)
-                        .build()
-                ).collect(toList());
-        SendMessageBatchRequest sendMessageBatchRequest = SendMessageBatchRequest.builder()
-                .queueUrl(getQueueUrl(queueName))
-                .entries(sendMessageBatchRequestEntries)
-                .build();
-        getSqsExtendedClient().sendMessageBatch(sendMessageBatchRequest);
+        String queueUrl = getQueueUrl(queueName);
+        List<List<SendMessageBatchRequestEntry>> batches = splitBatchRequests(messages);
+        batches.forEach(batchEntries -> {
+            SendMessageBatchRequest sendMessageBatchRequest = SendMessageBatchRequest.builder()
+                    .queueUrl(queueUrl)
+                    .entries(batchEntries)
+                    .build();
+            getSqsExtendedClient().sendMessageBatch(sendMessageBatchRequest);
+        });
+    }
+
+    private List<List<SendMessageBatchRequestEntry>> splitBatchRequests(List<String> messages) {
+        List<List<SendMessageBatchRequestEntry>> batches = new ArrayList<>();
+        List<SendMessageBatchRequestEntry> batchEntries = new ArrayList<>();
+        int currentBatchByteSize = 0;
+        for (String m : messages) {
+            SendMessageBatchRequestEntry batchRequest = SendMessageBatchRequestEntry.builder()
+                    .id(randomUUID().toString())
+                    .messageBody(m)
+                    .build();
+            int batchRequestByteSize = batchRequest.toString().getBytes(StandardCharsets.UTF_8).length;
+            if (MAX_MESSAGE_BYTES < (currentBatchByteSize + batchRequestByteSize) ||
+                    MAX_BATCH_SIZE <= batchEntries.size()) {
+                batches.add(batchEntries);
+                batchEntries = new ArrayList<>();
+                currentBatchByteSize = 0;
+            }
+            currentBatchByteSize += batchRequestByteSize;
+            batchEntries.add(batchRequest);
+        }
+        batches.add(batchEntries);
+        return batches;
     }
 
     public List<String> readFromExtendedQueue(String queueName) {

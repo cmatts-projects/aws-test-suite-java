@@ -10,6 +10,8 @@ import com.amazonaws.services.sqs.model.SendMessageBatchRequestEntry;
 import software.amazon.payloadoffloading.S3BackedPayloadStore;
 import software.amazon.payloadoffloading.S3Dao;
 
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 import static co.cmatts.aws.v1.client.Configuration.configureEndPoint;
@@ -18,6 +20,8 @@ import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 
 public class Sqs {
+    private static final int MAX_MESSAGE_BYTES = 256000;
+    private static final int MAX_BATCH_SIZE = 10;
 
     private final String extendedClientBucket;
 
@@ -56,9 +60,10 @@ public class Sqs {
         }
 
         ExtendedClientConfiguration extendedClientConfig = new ExtendedClientConfiguration()
-                        .withPayloadSupportEnabled(getS3Client(), extendedClientBucket);
+                .withPayloadSupportEnabled(getS3Client(), extendedClientBucket);
 
-        extendedClient = new AmazonSQSExtendedClient(getSqsClient(), extendedClientConfig);;
+        extendedClient = new AmazonSQSExtendedClient(getSqsClient(), extendedClientConfig);
+        ;
         return extendedClient;
     }
 
@@ -100,10 +105,31 @@ public class Sqs {
     }
 
     public void sendToExtendedQueue(String queueName, List<String> messages) {
-        List<SendMessageBatchRequestEntry> batchEntries = messages.stream()
-                .map(m -> new SendMessageBatchRequestEntry(randomUUID().toString() , m))
-                .collect(toList());
-        getSqsExtendedClient().sendMessageBatch(getQueueUrl(queueName), batchEntries);
+        String queueUrl = getQueueUrl(queueName);
+        List<List<SendMessageBatchRequestEntry>> batches = splitBatchRequests(messages);
+        batches.forEach(batchEntries -> {
+            getSqsExtendedClient().sendMessageBatch(queueUrl, batchEntries);
+        });
+    }
+
+    private List<List<SendMessageBatchRequestEntry>> splitBatchRequests(List<String> messages) {
+        List<List<SendMessageBatchRequestEntry>> batches = new ArrayList<>();
+        List<SendMessageBatchRequestEntry> batchEntries = new ArrayList<>();
+        int currentBatchByteSize = 0;
+        for (String m : messages) {
+            SendMessageBatchRequestEntry batchRequest = new SendMessageBatchRequestEntry(randomUUID().toString(), m);
+            int batchRequestByteSize = batchRequest.toString().getBytes(StandardCharsets.UTF_8).length;
+            if (MAX_MESSAGE_BYTES < (currentBatchByteSize + batchRequestByteSize) ||
+                    MAX_BATCH_SIZE <= batchEntries.size()) {
+                batches.add(batchEntries);
+                batchEntries = new ArrayList<>();
+                currentBatchByteSize = 0;
+            }
+            currentBatchByteSize += batchRequestByteSize;
+            batchEntries.add(batchRequest);
+        }
+        batches.add(batchEntries);
+        return batches;
     }
 
     public List<String> readFromExtendedQueue(String queueName) {
@@ -124,7 +150,7 @@ public class Sqs {
     }
 
     public String storeOriginalMessage(String message) {
-        return getPayloadStore().storeOriginalPayload(message, (long)message.getBytes().length);
+        return getPayloadStore().storeOriginalPayload(message, (long) message.getBytes().length);
     }
 
     private String getQueueUrl(String queueName) {

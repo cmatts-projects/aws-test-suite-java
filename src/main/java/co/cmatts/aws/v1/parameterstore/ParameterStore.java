@@ -3,6 +3,7 @@ package co.cmatts.aws.v1.parameterstore;
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement;
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagementClientBuilder;
 import com.amazonaws.services.simplesystemsmanagement.model.GetParameterRequest;
+import com.amazonaws.services.simplesystemsmanagement.model.ParameterType;
 import com.amazonaws.services.simplesystemsmanagement.model.PutParameterRequest;
 
 import static co.cmatts.aws.v1.client.Configuration.configureEndPoint;
@@ -27,6 +28,7 @@ public class ParameterStore {
         PutParameterRequest parameterRequest = new PutParameterRequest()
                 .withName(parameterName)
                 .withValue(parameterValue)
+                .withType(ParameterType.String)
                 .withDescription(parameterDescription);
 
         getParameterStoreClient().putParameter(parameterRequest);

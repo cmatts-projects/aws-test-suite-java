@@ -19,7 +19,7 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 @Testcontainers
 @ExtendWith(SystemStubsExtension.class)
 class ParameterStoreTest {
-    private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
+    private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("2.1.0");
     private static final String PARAMETER_NAME = "MY_PARAMETER";
     private static final String PARAMETER_VALUE = "A parameter value";
     private static final String PARAMETER_DESCRIPTION = "A description";

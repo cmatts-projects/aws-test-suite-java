@@ -29,7 +29,7 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 @Testcontainers
 @ExtendWith(SystemStubsExtension.class)
 class KinesisTest {
-    private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
+    private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("2.1.0");
     private static final String MY_STREAM = "myStream";
     private static final String A_MESSAGE = "A message";
     private static final String ANOTHER_MESSAGE = "Another message";

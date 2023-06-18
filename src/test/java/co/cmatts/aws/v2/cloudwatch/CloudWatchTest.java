@@ -27,7 +27,7 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 @ExtendWith(SystemStubsExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CloudWatchTest {
-    private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
+    private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("2.1.0");
     private static final int NUMBER_METRICS = 100;
     private static final String MY_DIMENSION = "myDimension";
     private static final String MY_COUNT = "myCount";

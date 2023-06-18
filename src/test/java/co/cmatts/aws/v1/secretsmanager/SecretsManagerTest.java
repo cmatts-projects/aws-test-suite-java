@@ -18,7 +18,7 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 @ExtendWith(SystemStubsExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SecretsManagerTest {
-    private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
+    private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("2.1.0");
     private static final String SECRET_NAME = "MY_SECRET";
     private static final String SECRET_VALUE = "{ \"mySecret\": \"mySecretValue\" }";
 

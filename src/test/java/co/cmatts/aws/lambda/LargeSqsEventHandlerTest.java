@@ -31,7 +31,7 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 @Testcontainers
 @ExtendWith(SystemStubsExtension.class)
 class LargeSqsEventHandlerTest {
-    private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("0.12.15");
+    private static final DockerImageName IMAGE = DockerImageName.parse("localstack/localstack").withTag("2.1.0");
     private static final String TEST_QUEUE_BUCKET = "my-queue-bucket";
     private static final String TEST_QUEUE = "myQueue";
     private static final String TEST_MESSAGE = StringUtils.repeat("X", 257 * 1024);
