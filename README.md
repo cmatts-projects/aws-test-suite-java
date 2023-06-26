@@ -1,6 +1,6 @@
-# AWS Test Suite
+# AWS Test Suite for Java
 
-The AWS Test Suite is a testing repository for AWS services.
+The AWS Test Suite is a testing repository for AWS services in Java.
 This repo contains sample implementations of AWS features and services along with a Localstack test implementation of
 those services.
 
