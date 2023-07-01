@@ -10,19 +10,22 @@
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>16</java.version>
         <aws.version1>1.12.20</aws.version1>
         <aws.version2>2.20.79</aws.version2>
         <aws.crt.version>0.22.1</aws.crt.version>
         <aws.kinesis.version>0.14.9</aws.kinesis.version>
         <junit.version>5.7.2</junit.version>
-        <testcontainers.version>1.15.3</testcontainers.version>
+        <testcontainers.version>1.18.3</testcontainers.version>
         <lombok.version>1.18.20</lombok.version>
         <retry4j.version>0.15.0</retry4j.version>
         <awaitility.version>3.0.0</awaitility.version>
         <aws.sqs.extended.client.version>1.2.4</aws.sqs.extended.client.version>
         <aws.lambda.version>1.2.1</aws.lambda.version>
         <aws.lambda.events.version>3.10.0</aws.lambda.events.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
+        <system-stubs-jupiter.version>1.2.0</system-stubs-jupiter.version>
+        <assertj-core.version>3.20.2</assertj-core.version>
     </properties>
 
     <dependencies>
@@ -107,7 +110,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
-            <version>4.4</version>
+            <version>${commons-collections4.version}</version>
         </dependency>
         <dependency>
             <groupId>com.evanlennick</groupId>
@@ -140,7 +143,7 @@
         <dependency>
             <groupId>uk.org.webcompere</groupId>
             <artifactId>system-stubs-jupiter</artifactId>
-            <version>1.1.0</version>
+            <version>${system-stubs-jupiter.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -148,7 +151,7 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.20.2</version>
+            <version>${assertj-core.version}</version>
             <scope>test</scope>
         </dependency>
 
