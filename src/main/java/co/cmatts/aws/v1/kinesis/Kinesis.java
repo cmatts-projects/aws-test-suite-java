@@ -39,7 +39,7 @@ public class Kinesis {
     private String streamName;
 
 
-    private AmazonKinesis getKenisisClient() {
+    private AmazonKinesis getKinesisClient() {
         if (client != null) {
             return client;
         }
@@ -53,7 +53,7 @@ public class Kinesis {
 
     public void createStream(String name, int numberOfShards) {
         streamName = name;
-        getKenisisClient().createStream(name, numberOfShards);
+        getKinesisClient().createStream(name, numberOfShards);
         waitForKinesisToBeActive();
     }
 
@@ -74,7 +74,7 @@ public class Kinesis {
     }
 
     public String getStreamStatus() {
-        return getKenisisClient()
+        return getKinesisClient()
                 .describeStream(streamName)
                 .getStreamDescription()
                 .getStreamStatus();
@@ -157,7 +157,7 @@ public class Kinesis {
 
     private void readStream() {
         ListShardsRequest listShardsRequest = new ListShardsRequest().withStreamName(streamName);
-        ListShardsResult shards = getKenisisClient().listShards(listShardsRequest);
+        ListShardsResult shards = getKinesisClient().listShards(listShardsRequest);
 
         shards.getShards().forEach(shard -> {
             receivedRecords.addAll(readStream(shard));
@@ -177,7 +177,7 @@ public class Kinesis {
         getRecordsRequest.setShardIterator(shardIterator);
         getRecordsRequest.setLimit(25);
 
-        GetRecordsResult getRecordsResult = getKenisisClient().getRecords(getRecordsRequest);
+        GetRecordsResult getRecordsResult = getKinesisClient().getRecords(getRecordsRequest);
         return getRecordsResult.getRecords();
     }
 }

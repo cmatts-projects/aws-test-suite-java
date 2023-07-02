@@ -26,7 +26,7 @@ public class Kinesis {
     private String streamName;
 
 
-    private KinesisClient getKenisisClient() {
+    private KinesisClient getKinesisClient() {
         if (client != null) {
             return client;
         }
@@ -44,7 +44,7 @@ public class Kinesis {
                 .streamName(streamName)
                 .shardCount(numberOfShards)
                 .build();
-        getKenisisClient().createStream(createStreamRequest);
+        getKinesisClient().createStream(createStreamRequest);
         waitForKinesisToBeActive();
     }
 
@@ -54,7 +54,7 @@ public class Kinesis {
                 .streamName(streamName)
                 .build();
 
-        getKenisisClient().waiter().waitUntilStreamExists(describeStreamRequest);
+        getKinesisClient().waiter().waitUntilStreamExists(describeStreamRequest);
     }
 
     public StreamStatus getStreamStatus() {
@@ -63,7 +63,7 @@ public class Kinesis {
                 .streamName(streamName)
                 .build();
 
-        return getKenisisClient()
+        return getKinesisClient()
                 .describeStream(describeStreamRequest)
                 .streamDescription()
                 .streamStatus();
@@ -82,7 +82,7 @@ public class Kinesis {
                 .records(putRecords)
                 .build();
 
-        getKenisisClient().putRecords(request);
+        getKinesisClient().putRecords(request);
     }
 
     private SdkBytes stringToSdkBytes(String message) {
@@ -117,7 +117,7 @@ public class Kinesis {
                 .builder()
                 .streamName(streamName)
                 .build();
-        ListShardsResponse shards = getKenisisClient().listShards(listShardsRequest);
+        ListShardsResponse shards = getKinesisClient().listShards(listShardsRequest);
 
         shards.shards().forEach(shard -> receivedRecords.addAll(readStream(shard)));
     }
@@ -130,7 +130,7 @@ public class Kinesis {
                 .shardIteratorType(TRIM_HORIZON)
                 .build();
 
-        GetShardIteratorResponse getShardIteratorResponse = getKenisisClient()
+        GetShardIteratorResponse getShardIteratorResponse = getKinesisClient()
                 .getShardIterator(getShardIteratorRequest);
         String shardIterator = getShardIteratorResponse.shardIterator();
 
@@ -140,7 +140,7 @@ public class Kinesis {
                 .limit(25)
                 .build();
 
-        GetRecordsResponse getRecordsResponse = getKenisisClient().getRecords(getRecordsRequest);
+        GetRecordsResponse getRecordsResponse = getKinesisClient().getRecords(getRecordsRequest);
         return getRecordsResponse.records();
     }
 }
